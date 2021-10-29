@@ -31,7 +31,6 @@ public class PlayerTurnChessGameState : ChessGameState
 
     void OnPressedConfirm()
     {
-        Debug.Log("Attempt to enter Enemy State!");
-        // change the enemy turn state
+        StateMachine.ChangeState<EnemyTurnChessGameState>();
     }
 }

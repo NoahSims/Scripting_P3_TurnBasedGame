@@ -31,6 +31,6 @@ public class EnemyTurnChessGameState : ChessGameState
         Debug.Log("Enemy performs action");
         EnemyTurnEnded?.Invoke();
         // turn over. Go back to Player.
-        StateMachine.ChangeState<PlayerTurnChessGameState>();
+        StateMachine.ChangeState<EndRoundChessGameState>();
     }
 }

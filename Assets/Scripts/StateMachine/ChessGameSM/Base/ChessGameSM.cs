@@ -8,7 +8,7 @@ public class ChessGameSM : StateMachine
     public InputController Input => _input;
 
     private int _roundNumber = 0;
-    public int RoundNumber => _roundNumber;
+    public int RoundNumber { get => _roundNumber; set => _roundNumber = value; }
 
     private void Start()
     {

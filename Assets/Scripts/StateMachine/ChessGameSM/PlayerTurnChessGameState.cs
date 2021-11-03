@@ -14,13 +14,15 @@ public class PlayerTurnChessGameState : ChessGameState
         PlayerTurnBegan?.Invoke(StateMachine.RoundNumber);
 
         // hook into events
-        StateMachine.Input.PressedMouse += OnPressedConfirm;
+        ChessGameUIController.SkipButtonPressed += OnPressedConfirm;
+        //StateMachine.Input.PressedMouse += OnPressedConfirm;
     }
 
     public override void Exit()
     {
         // unhook from events
-        StateMachine.Input.PressedMouse -= OnPressedConfirm;
+        //StateMachine.Input.PressedMouse -= OnPressedConfirm;
+        ChessGameUIController.SkipButtonPressed -= OnPressedConfirm;
 
         PlayerTurnEnded?.Invoke();
         Debug.Log("Player Turn: Exiting...");

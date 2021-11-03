@@ -13,13 +13,15 @@ public class WinChessGameState : ChessGameState
         Debug.Log("Win: ... Entering");
         PlayerWon?.Invoke();
 
-        StateMachine.Input.PressedMouse += OnPressedConfirm;
+        ChessGameUIController.ReturnToMenuButtonPressed += OnPressedConfirm;
+        //StateMachine.Input.PressedMouse += OnPressedConfirm;
     }
 
     public override void Exit()
     {
         Debug.Log("Win: Exiting ...");
-        StateMachine.Input.PressedMouse -= OnPressedConfirm;
+        ChessGameUIController.ReturnToMenuButtonPressed -= OnPressedConfirm;
+        //StateMachine.Input.PressedMouse -= OnPressedConfirm;
     }
 
     void OnPressedConfirm()

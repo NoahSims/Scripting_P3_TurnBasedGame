@@ -1,37 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SetupChessGameState : ChessGameState
 {
+    public static event Action SetupBegan;
+    public static event Action SetupEnded;
+
     [SerializeField] int _numberOfObjectives = 3;
     [SerializeField] int _startingEnemyNumber = 3;
-
-    bool _activated = false;
 
     public override void Enter()
     {
         Debug.Log("Setup: ...Entering");
-        Debug.Log("Creating " + _numberOfObjectives + " objectives.");
-        Debug.Log("Creating " + _startingEnemyNumber + "enemies.");
-        // CANT change state while still in Enter()/Exit() transition!
-        // DONT put ChangeState<> here
-        _activated = false;
+        SetupBegan?.Invoke();
+
+        StartCoroutine(SpawnPieces());
     }
 
-    public override void Tick()
+    IEnumerator SpawnPieces()
     {
-        // a little bit hacky, should ususally use delays or Input
-        if(!_activated)
+        yield return new WaitForSeconds(0.25f);
+        Debug.Log("Spawning White King");
+        GameBoardController.Current.SpawnWhiteKing();
+
+        Debug.Log("Creating " + _numberOfObjectives + " objectives.");
+        for(int i = 0; i < _numberOfObjectives; i++)
         {
-            _activated = true;
-            StateMachine.ChangeState<PlayerTurnChessGameState>();
+            yield return new WaitForSeconds(0.25f);
+            GameBoardController.Current.SpawnWhitePawn();
         }
+
+        Debug.Log("Creating " + _startingEnemyNumber + "enemies.");
+        for (int i = 0; i < _startingEnemyNumber; i++)
+        {
+            yield return new WaitForSeconds(0.25f);
+            GameBoardController.Current.SpawnBlackPiece();
+        }
+
+        StateMachine.ChangeState<DefenderPlacementChessGameState>();
     }
 
     public override void Exit()
     {
-        _activated = false;
+        SetupEnded?.Invoke();
         Debug.Log("Setup: Exiting...");
     }
 }

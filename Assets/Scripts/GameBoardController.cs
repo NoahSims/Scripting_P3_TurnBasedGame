@@ -55,14 +55,36 @@ public class GameBoardController : MonoBehaviour
         {
             for (int row = 0; row < GameBoard.Height; row++)
             {
-                //Vector3 pos = (new Vector3(col, 0, row) * GameBoard.CellSize) + _pieceOffset;
-                //GameObject newTileIndicator = Instantiate(_tileIndicatorPrefab, transform);
                 GameBoard.GridArray[col, row].TileIndicator = Instantiate(_tileIndicatorPrefab, _tileIndicatorHolder.transform);
                 GameBoard.GridArray[col, row].TileIndicator.transform.position += (new Vector3(col, 0, row) * GameBoard.CellSize) + (new Vector3(GameBoard.CellSize, 0, GameBoard.CellSize) * 0.5f);
                 GameBoard.GridArray[col, row].TileIndicator.SetActive(false);
             }
         }
-        
+    }
+
+    public void DisableAllIndicators()
+    {
+        for (int col = 0; col < GameBoard.Width; col++)
+        {
+            for (int row = 0; row < GameBoard.Height; row++)
+            {
+                GameBoard.GridArray[col, row].TileIndicator.SetActive(false);
+            }
+        }
+    }
+
+    public void SetIndicators(int minRow, int maxRow, int minCol, int maxCol)
+    {
+        for(int col = minCol; col < maxCol; col++)
+        {
+            for(int row = minRow; row < maxRow; row++)
+            {
+                if (GameBoard.GridArray[col, row].TileContents == ((int)ChessPieceEnum.EMPTY))
+                {
+                    GameBoard.GridArray[col, row].TileIndicator.SetActive(true);
+                }
+            }
+        }
     }
 
     private void DisableAllPieces()

@@ -8,6 +8,9 @@ public class ChessGameUIController : MonoBehaviour
 {
     public static Action SkipButtonPressed;
     public static Action ReturnToMenuButtonPressed;
+    public static Action DefenderPlacementKnightButtonPressed;
+    public static Action DefenderPlacementBishopButtonPressed;
+    public static Action DefenderPlacementRookButtonPressed;
 
     [SerializeField] Canvas _defenderPlacementScreen = null;
     [SerializeField] Text _enemyThinkingText = null;
@@ -55,6 +58,7 @@ public class ChessGameUIController : MonoBehaviour
         _skipTurnButton.gameObject.SetActive(false);
     }
 
+    #region Buttons
     public void SkipButton()
     {
         SkipButtonPressed?.Invoke();
@@ -64,6 +68,26 @@ public class ChessGameUIController : MonoBehaviour
     {
         ReturnToMenuButtonPressed?.Invoke();
     }
+
+    public void DefenderPlacementButton(int pieceNum, GameObject chessPiece, Button button)
+    {
+        chessPiece.SetActive(false);
+        button.gameObject.SetActive(false);
+
+        switch(pieceNum)
+        {
+            case (1):
+                DefenderPlacementKnightButtonPressed?.Invoke();
+                break;
+            case (2):
+                DefenderPlacementBishopButtonPressed?.Invoke();
+                break;
+            case (3):
+                DefenderPlacementRookButtonPressed?.Invoke();
+                break;
+        }
+    }
+    #endregion
 
     #region Events
     void OnPlayerTurnBegan(int turnNumber)

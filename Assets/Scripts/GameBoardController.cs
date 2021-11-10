@@ -9,8 +9,12 @@ public class GameBoardController : MonoBehaviour
     [Header("Board")]
     [SerializeField] private GameObject _boardOrigin = null;
     [SerializeField] private float _pieceYOffest = 0;
+    [SerializeField] private float _tileSize = 1.5f;
+    [SerializeField] private GameObject _tileIndicatorHolder;
+    [SerializeField] private GameObject _tileIndicatorPrefab;
     private Vector3 _pieceOffset;
 
+    [Header("Game Pieces")]
     [SerializeField] private GameObject _whiteKing = null;
     [SerializeField] private GameObject _whitePawn = null;
     [SerializeField] private GameObject[] _whitePawns;
@@ -28,7 +32,8 @@ public class GameBoardController : MonoBehaviour
 
     private void Start()
     {
-        ClearBoard();
+        _tileIndicatorHolder.transform.position = _boardOrigin.transform.position;
+        InstantiateBoard();
         _pieceOffset = new Vector3(GameBoard.CellSize * 0.5f, _pieceYOffest, GameBoard.CellSize * 0.5f);
 
         DisableAllPieces();
@@ -42,9 +47,22 @@ public class GameBoardController : MonoBehaviour
         }
     }
 
-    public void ClearBoard()
+    public void InstantiateBoard()
     {
-        GameBoard = new TileGrid(8, 8, 1.5f);
+        GameBoard = new TileGrid(8, 8, _tileSize);
+        
+        for (int col = 0; col < GameBoard.Width; col++)
+        {
+            for (int row = 0; row < GameBoard.Height; row++)
+            {
+                //Vector3 pos = (new Vector3(col, 0, row) * GameBoard.CellSize) + _pieceOffset;
+                //GameObject newTileIndicator = Instantiate(_tileIndicatorPrefab, transform);
+                GameBoard.GridArray[col, row].TileIndicator = Instantiate(_tileIndicatorPrefab, _tileIndicatorHolder.transform);
+                GameBoard.GridArray[col, row].TileIndicator.transform.position += (new Vector3(col, 0, row) * GameBoard.CellSize) + (new Vector3(GameBoard.CellSize, 0, GameBoard.CellSize) * 0.5f);
+                GameBoard.GridArray[col, row].TileIndicator.SetActive(false);
+            }
+        }
+        
     }
 
     private void DisableAllPieces()
@@ -58,7 +76,7 @@ public class GameBoardController : MonoBehaviour
 
     public void SpawnWhiteKing()
     {
-        GameBoard.GridArray[4, 0] = ((int)ChessPieceEnum.W_KING);
+        GameBoard.GridArray[4, 0].TileContents = ((int)ChessPieceEnum.W_KING);
         _whiteKing.SetActive(true);
     }
 
@@ -111,11 +129,11 @@ public class GameBoardController : MonoBehaviour
             }
 
             // make sure position is not occupied
-            if (GameBoard.GridArray[x, z] == ((int)ChessPieceEnum.EMPTY))
+            if (GameBoard.GridArray[x, z].TileContents == ((int)ChessPieceEnum.EMPTY))
                 posFound = true;
         }
 
-        GameBoard.GridArray[x, z] = ((int)ChessPieceEnum.W_PAWN);
+        GameBoard.GridArray[x, z].TileContents = ((int)ChessPieceEnum.W_PAWN);
         
         // TODO: need to keep track of pieces that are created
         Vector3 pos = _boardOrigin.transform.position + new Vector3(x * GameBoard.CellSize, 0, z * GameBoard.CellSize) + _pieceOffset;
@@ -135,11 +153,11 @@ public class GameBoardController : MonoBehaviour
             z = Mathf.FloorToInt(Random.Range(5, 7.999f));
 
             // make sure position is not occupied
-            if (GameBoard.GridArray[x, z] == ((int)ChessPieceEnum.EMPTY))
+            if (GameBoard.GridArray[x, z].TileContents == ((int)ChessPieceEnum.EMPTY))
                 posFound = true;
         }
 
-        GameBoard.GridArray[x, z] = ((int)ChessPieceEnum.B_ENEMY);
+        GameBoard.GridArray[x, z].TileContents = ((int)ChessPieceEnum.B_ENEMY);
 
         // TODO: need to keep track of pieces that are created
         Vector3 pos = _boardOrigin.transform.position + new Vector3(x * GameBoard.CellSize, 0, z * GameBoard.CellSize) + _pieceOffset;

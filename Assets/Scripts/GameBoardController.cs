@@ -186,6 +186,44 @@ public class GameBoardController : MonoBehaviour
         GameObject newPawn = Instantiate(_blackPiecePrefabs[Mathf.FloorToInt(Random.Range(0, 2.999f))], pos, Quaternion.identity);
     }
 
+    public Vector2 GetTileFromWorldSpace(Vector3 worldPos)
+    {
+        worldPos -= _boardOrigin.transform.position;
+        worldPos = worldPos / GameBoard.CellSize;
+
+        return new Vector2(Mathf.Floor(worldPos.x), Mathf.Floor(worldPos.z));
+    }
+
+    public Vector3 GetChessWorldSpaceFromTile(int x, int z)
+    {
+        return (new Vector3(x, 0, z) * GameBoard.CellSize) + _boardOrigin.transform.position + _pieceOffset;
+    }
+
+    public int CheckTileContents(int x, int z)
+    {
+        if (x >= 0 && x < GameBoard.Width && z >= 0 && z < GameBoard.Height)
+        {
+            return GameBoard.GridArray[x, z].TileContents;
+        }
+
+        return -1;
+    }
+
+    public bool AttemptPlacePiece(int x, int z, ChessPieceEnum piece)
+    {
+        if (x >= 0 && x < GameBoard.Width && z >= 0 && z < GameBoard.Height)
+        {
+            if (GameBoard.GridArray[x, z].TileContents == ((int)ChessPieceEnum.EMPTY) && GameBoard.GridArray[x, z].TileIndicator.activeInHierarchy)
+            {
+                GameBoard.GridArray[x, z].TileIndicator.SetActive(false);
+                GameBoard.GridArray[x, z].TileContents = (int)piece;
+                return true;
+            }
+        } 
+        
+        return false;
+    }
+
     private void DebugLines()
     {
         for (int col = 0; col < GameBoard.Width; col++)
@@ -202,4 +240,4 @@ public class GameBoardController : MonoBehaviour
 }
 
 // TODO: rework piece numbering system
-public enum ChessPieceEnum { EMPTY = 0, W_KING, W_PAWN, B_ENEMY};
+public enum ChessPieceEnum { EMPTY = 0, W_KING, W_PAWN, W_KNIGHT, W_BISHOP, W_ROOK, B_ENEMY};

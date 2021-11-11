@@ -14,7 +14,7 @@ public class PlayerTurnChessGameState : ChessGameState
         PlayerTurnBegan?.Invoke(StateMachine.RoundNumber);
 
         // hook into events
-        ChessGameUIController.SkipButtonPressed += OnPressedConfirm;
+        ChessGameUIController.ContinueButtonPressed += OnPressedConfirm;
         //StateMachine.Input.PressedMouse += OnPressedConfirm;
     }
 
@@ -22,7 +22,7 @@ public class PlayerTurnChessGameState : ChessGameState
     {
         // unhook from events
         //StateMachine.Input.PressedMouse -= OnPressedConfirm;
-        ChessGameUIController.SkipButtonPressed -= OnPressedConfirm;
+        ChessGameUIController.ContinueButtonPressed -= OnPressedConfirm;
 
         PlayerTurnEnded?.Invoke();
         Debug.Log("Player Turn: Exiting...");

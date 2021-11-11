@@ -8,6 +8,7 @@ public class DefenderPlacementChessGameState : ChessGameState
     public static event Action DefenderPlacementBegan;
     public static event Action DefenderPlacementEnded;
     public static event Action<int> DefenderPlacementCancelHolding;
+    public static event Action<bool> DefenderPlacementContinueReady;
 
     [SerializeField] GameObject _mouseTracker = null;
     [SerializeField] GameObject _defenderKnight = null;
@@ -15,6 +16,10 @@ public class DefenderPlacementChessGameState : ChessGameState
     [SerializeField] GameObject _defenderRook = null;
 
     private int _holding = 0;
+    private bool _defenderKnightPlaced = false;
+    private bool _defenderBishopPlaced = false;
+    private bool _defenderRookPlaced = false;
+    private bool _readyToContinue = false;
 
     public override void Enter()
     {
@@ -27,12 +32,24 @@ public class DefenderPlacementChessGameState : ChessGameState
         ChessGameUIController.DefenderPlacementKnightButtonPressed += OnDefenderKnightButton;
         ChessGameUIController.DefenderPlacementBishopButtonPressed += OnDefenderBishopButton;
         ChessGameUIController.DefenderPlacementRookButtonPressed += OnDefenderRookButton;
-        ChessGameUIController.SkipButtonPressed += OnSkip;
+        ChessGameUIController.ContinueButtonPressed += OnContinue;
     }
 
     public override void Tick()
     {
-        _mouseTracker.transform.position = InputController.Current.GetMouseWorldPosition();
+        Vector2 tileCoords = GameBoardController.Current.GetTileFromWorldSpace(InputController.Current.GetMouseWorldPosition());
+        _mouseTracker.transform.position = GameBoardController.Current.GetChessWorldSpaceFromTile((int)tileCoords.x, (int)tileCoords.y);
+
+        if(!_readyToContinue && _defenderKnightPlaced && _defenderBishopPlaced && _defenderRookPlaced)
+        {
+            _readyToContinue = true;
+            DefenderPlacementContinueReady?.Invoke(true);
+        }
+        else if(_readyToContinue && !(_defenderKnightPlaced && _defenderBishopPlaced && _defenderRookPlaced))
+        {
+            _readyToContinue = false;
+            DefenderPlacementContinueReady?.Invoke(false);
+        }
     }
 
     private void OnMousePressed(int buttonNum)
@@ -41,9 +58,66 @@ public class DefenderPlacementChessGameState : ChessGameState
         {
             OnDefenderPlacementCancelHolding(_holding);
         }
+
+        else if(_holding != 0 && buttonNum == 0)
+        {
+            Vector2 tileCoords = GameBoardController.Current.GetTileFromWorldSpace(InputController.Current.GetMouseWorldPosition());
+
+            switch (_holding)
+            {
+                case (1):
+                    if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, ChessPieceEnum.W_KNIGHT))
+                    {
+                        _defenderKnight.transform.parent = null;
+                        _holding = 0;
+                        _defenderKnightPlaced = true;
+                    }
+                    break;
+                case (2):
+                    if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, ChessPieceEnum.W_BISHOP))
+                    {
+                        _defenderBishop.transform.parent = null;
+                        _holding = 0;
+                        _defenderBishopPlaced = true;
+                    }
+                    break;
+                case (3):
+                    if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, ChessPieceEnum.W_ROOK))
+                    {
+                        _defenderRook.transform.parent = null;
+                        _holding = 0;
+                        _defenderRookPlaced = true;
+                    }
+                    break;
+            }
+        }
+
+        else if(buttonNum == 0)
+        {
+            Vector2 tileCoords = GameBoardController.Current.GetTileFromWorldSpace(InputController.Current.GetMouseWorldPosition());
+            int piece = GameBoardController.Current.CheckTileContents((int)tileCoords.x, (int)tileCoords.y);
+            switch(piece)
+            {
+                case (((int)ChessPieceEnum.W_KNIGHT)):
+                    OnDefenderKnightButton();
+                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileContents = ((int)ChessPieceEnum.EMPTY);
+                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileIndicator.SetActive(true);
+                    break;
+                case (((int)ChessPieceEnum.W_BISHOP)):
+                    OnDefenderBishopButton();
+                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileContents = ((int)ChessPieceEnum.EMPTY);
+                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileIndicator.SetActive(true);
+                    break;
+                case (((int)ChessPieceEnum.W_ROOK)):
+                    OnDefenderRookButton();
+                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileContents = ((int)ChessPieceEnum.EMPTY);
+                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileIndicator.SetActive(true);
+                    break;
+            }
+        }
     }
 
-    private void OnSkip()
+    private void OnContinue()
     {
         StateMachine.ChangeState<EnemyTurnChessGameState>();
     }
@@ -54,6 +128,7 @@ public class DefenderPlacementChessGameState : ChessGameState
             OnDefenderPlacementCancelHolding(_holding);
 
         _holding = 1;
+        _defenderKnightPlaced = false;
 
         _defenderKnight.SetActive(true);
         _defenderKnight.transform.parent = _mouseTracker.transform;
@@ -66,6 +141,7 @@ public class DefenderPlacementChessGameState : ChessGameState
             OnDefenderPlacementCancelHolding(_holding);
 
         _holding = 2;
+        _defenderBishopPlaced = false;
 
         _defenderBishop.SetActive(true);
         _defenderBishop.transform.parent = _mouseTracker.transform;
@@ -78,6 +154,7 @@ public class DefenderPlacementChessGameState : ChessGameState
             OnDefenderPlacementCancelHolding(_holding);
 
         _holding = 3;
+        _defenderRookPlaced = false;
 
         _defenderRook.SetActive(true);
         _defenderRook.transform.parent = _mouseTracker.transform;
@@ -103,12 +180,14 @@ public class DefenderPlacementChessGameState : ChessGameState
                 _defenderRook.SetActive(false);
                 break;
         }
+
+        _holding = 0;
     }
 
     public override void Exit()
     {
         InputController.Current.PressedMouse -= OnMousePressed;
-        ChessGameUIController.SkipButtonPressed -= OnSkip;
+        ChessGameUIController.ContinueButtonPressed -= OnContinue;
         ChessGameUIController.DefenderPlacementKnightButtonPressed -= OnDefenderKnightButton;
         ChessGameUIController.DefenderPlacementBishopButtonPressed -= OnDefenderBishopButton;
         ChessGameUIController.DefenderPlacementRookButtonPressed -= OnDefenderRookButton;

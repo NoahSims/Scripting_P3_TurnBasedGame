@@ -6,7 +6,7 @@ using System;
 
 public class ChessGameUIController : MonoBehaviour
 {
-    public static Action SkipButtonPressed;
+    public static Action ContinueButtonPressed;
     public static Action ReturnToMenuButtonPressed;
     public static Action DefenderPlacementKnightButtonPressed;
     public static Action DefenderPlacementBishopButtonPressed;
@@ -26,6 +26,7 @@ public class ChessGameUIController : MonoBehaviour
     [SerializeField] GameObject defenderPlacementBishopObject = null;
     [SerializeField] Button defenderPlacementRookButton = null;
     [SerializeField] GameObject defenderPlacementRookObject = null;
+    [SerializeField] Button defenderPlacementContinueButton = null;
 
     private void OnEnable()
     {
@@ -38,6 +39,7 @@ public class ChessGameUIController : MonoBehaviour
         DefenderPlacementChessGameState.DefenderPlacementBegan += OnDefenderPlacementBegan;
         DefenderPlacementChessGameState.DefenderPlacementEnded += OnDefenderPlacementEnded;
         DefenderPlacementChessGameState.DefenderPlacementCancelHolding += OnDefenderPlacementCancelHolding;
+        DefenderPlacementChessGameState.DefenderPlacementContinueReady += OnDefenderPlacementContinueReady;
         WinChessGameState.PlayerWon += OnPlayerWon;
     }
 
@@ -52,6 +54,7 @@ public class ChessGameUIController : MonoBehaviour
         DefenderPlacementChessGameState.DefenderPlacementBegan -= OnDefenderPlacementBegan;
         DefenderPlacementChessGameState.DefenderPlacementEnded -= OnDefenderPlacementEnded;
         DefenderPlacementChessGameState.DefenderPlacementCancelHolding -= OnDefenderPlacementCancelHolding;
+        DefenderPlacementChessGameState.DefenderPlacementContinueReady -= OnDefenderPlacementContinueReady;
         WinChessGameState.PlayerWon -= OnPlayerWon;
     }
 
@@ -64,14 +67,15 @@ public class ChessGameUIController : MonoBehaviour
         _enemyThinkingText.gameObject.SetActive(false);
         _boardGeneratingText.gameObject.SetActive(false);
         _defenderPlacementScreen.gameObject.SetActive(false);
+        defenderPlacementContinueButton.gameObject.SetActive(false);
         _winScreen.gameObject.SetActive(false);
         _skipTurnButton.gameObject.SetActive(false);
     }
 
     #region Buttons
-    public void SkipButton()
+    public void ContinueButton()
     {
-        SkipButtonPressed?.Invoke();
+        ContinueButtonPressed?.Invoke();
     }
 
     public void ReturnToMenuButton()
@@ -186,6 +190,11 @@ public class ChessGameUIController : MonoBehaviour
     void OnDefenderPlacementEnded()
     {
         _defenderPlacementScreen.gameObject.SetActive(false);
+    }
+
+    void OnDefenderPlacementContinueReady(bool status)
+    {
+        defenderPlacementContinueButton.gameObject.SetActive(status);
     }
     #endregion
 }

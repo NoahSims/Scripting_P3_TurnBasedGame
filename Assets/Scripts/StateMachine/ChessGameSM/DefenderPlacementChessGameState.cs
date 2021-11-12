@@ -69,6 +69,8 @@ public class DefenderPlacementChessGameState : ChessGameState
                     if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, ChessPieceEnum.W_KNIGHT))
                     {
                         _defenderKnight.transform.parent = null;
+                        _defenderKnight.gameObject.GetComponent<ChessPieceKnight>().xPos = (int)tileCoords.x;
+                        _defenderKnight.gameObject.GetComponent<ChessPieceKnight>().zPos = (int)tileCoords.y;
                         _holding = 0;
                         _defenderKnightPlaced = true;
                     }
@@ -77,6 +79,8 @@ public class DefenderPlacementChessGameState : ChessGameState
                     if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, ChessPieceEnum.W_BISHOP))
                     {
                         _defenderBishop.transform.parent = null;
+                        _defenderBishop.gameObject.GetComponent<ChessPieceBishop>().xPos = (int)tileCoords.x;
+                        _defenderBishop.gameObject.GetComponent<ChessPieceBishop>().zPos = (int)tileCoords.y;
                         _holding = 0;
                         _defenderBishopPlaced = true;
                     }
@@ -85,6 +89,8 @@ public class DefenderPlacementChessGameState : ChessGameState
                     if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, ChessPieceEnum.W_ROOK))
                     {
                         _defenderRook.transform.parent = null;
+                        _defenderRook.gameObject.GetComponent<ChessPieceRook>().xPos = (int)tileCoords.x;
+                        _defenderRook.gameObject.GetComponent<ChessPieceRook>().zPos = (int)tileCoords.y;
                         _holding = 0;
                         _defenderRookPlaced = true;
                     }

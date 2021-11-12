@@ -15,6 +15,8 @@ public class GameBoardController : MonoBehaviour
     private Vector3 _pieceOffset;
 
     [Header("Game Pieces")]
+    [SerializeField] public List<ChessPiece> _defenders;
+    //[SerializeField] private List<ChessPiece> _blackTeam;
     [SerializeField] private GameObject _whiteKing = null;
     [SerializeField] private GameObject _whitePawn = null;
     [SerializeField] private GameObject[] _whitePawns;

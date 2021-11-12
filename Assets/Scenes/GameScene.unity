@@ -610,6 +610,10 @@ MonoBehaviour:
   _tileSize: 1.5
   _tileIndicatorHolder: {fileID: 1842632719}
   _tileIndicatorPrefab: {fileID: 5688943553738111066, guid: efb4d3d6add50e64cac1d8d5dcef71c2, type: 3}
+  _defenders:
+  - {fileID: 1901482288}
+  - {fileID: 711547204}
+  - {fileID: 1160858284}
   _whiteKing: {fileID: 2020839437}
   _whitePawn: {fileID: 104878, guid: 48d5ea4ff810d0e4ea36af7235dd5fd7, type: 3}
   _whitePawns:
@@ -1431,6 +1435,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 190264, guid: cd05c23b470229c44a8d53d6e86225f6, type: 3}
   m_PrefabInstance: {fileID: 754459583}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &711547204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711547199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b33b6a3b7af6aa148893826d71d254d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Team: 0
+  ChessPieceType: 4
+  xPos: 0
+  zPos: 0
 --- !u!1 &715151134
 GameObject:
   m_ObjectHideFlags: 0
@@ -2009,6 +2029,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 114028, guid: 43ef2ba32fda59c42a1410ea490d494b, type: 3}
   m_PrefabInstance: {fileID: 1198428175}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1160858284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160858279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90f5ad2020b13ca4fb673c5dde1fa4cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Team: 0
+  ChessPieceType: 5
+  xPos: 0
+  zPos: 0
 --- !u!1 &1179804123
 GameObject:
   m_ObjectHideFlags: 0
@@ -3058,6 +3094,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 107724, guid: 7248632fb471af143947a88a47eae959, type: 3}
   m_PrefabInstance: {fileID: 234906884}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1901482288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901482283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78d7c77ee97aa7448ba19469b55609f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Team: 0
+  ChessPieceType: 3
+  xPos: 0
+  zPos: 0
 --- !u!1001 &1942813335
 PrefabInstance:
   m_ObjectHideFlags: 0

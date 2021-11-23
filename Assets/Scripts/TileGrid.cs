@@ -31,10 +31,12 @@ public class Tile
 {
     public int TileContents;
     public GameObject TileIndicator;
+    public ChessPiece TilePiece;
 
     public Tile()
     {
         TileContents = 0;
         TileIndicator = null;
+        TilePiece = null;
     }
 }

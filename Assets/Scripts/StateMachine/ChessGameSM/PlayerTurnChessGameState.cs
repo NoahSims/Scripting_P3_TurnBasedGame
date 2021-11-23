@@ -8,6 +8,8 @@ public class PlayerTurnChessGameState : ChessGameState
     public static event Action<int> PlayerTurnBegan;
     public static event Action PlayerTurnEnded;
 
+    private ChessPiece _selectedPiece = null;
+
     public override void Enter()
     {
         Debug.Log("Player Turn: ...Entering");
@@ -17,7 +19,8 @@ public class PlayerTurnChessGameState : ChessGameState
         ChessGameUIController.ContinueButtonPressed += OnPressedConfirm;
         InputController.Current.PressedMouse += OnMousePressed;
 
-        //GameBoardController.Current.GameBoard.GridArray[whiteKnight.GetComponent<ChessPieceKnight>().xPos, whiteKnight.GetComponent<ChessPieceKnight>().zPos].TileIndicator.SetActive(true);
+        // initiate turn
+        _selectedPiece = null;
         HighlightDefenders();
     }
 
@@ -25,31 +28,41 @@ public class PlayerTurnChessGameState : ChessGameState
     {
         if (button == 0)
         {
-            GameBoardController.Current.DisableAllIndicators();
-
+            // get tile clicked on
             Vector2 tile = GameBoardController.Current.GetTileFromWorldSpace(InputController.Current.GetMouseWorldPosition());
             int tileContents = GameBoardController.Current.CheckTileContents(((int)tile.x), ((int)tile.y));
+
+            // if a defender was clicked on
             if (tileContents == ((int)ChessPieceEnum.W_KNIGHT) || tileContents == ((int)ChessPieceEnum.W_BISHOP) || tileContents == ((int)ChessPieceEnum.W_ROOK))
             {
-                ChessPiece selectedPiece = null;
+                GameBoardController.Current.DisableAllIndicators();
+
+                // figure out which piece is selected
                 foreach (ChessPiece piece in GameBoardController.Current._defenders)
                 {
-                    Debug.Log("checking piece: " + piece.ChessPieceType);
+                    //Debug.Log("checking piece: " + piece.ChessPieceType);
                     if (tileContents == ((int)piece.ChessPieceType))
                     {
                         Debug.Log("piece selected: " + piece.ChessPieceType);
-                        selectedPiece = piece;
+                        _selectedPiece = piece;
                         break;
                     }
                 }
 
-                selectedPiece.SetTileIndicator(true);
+                // highlight possible moves
+                _selectedPiece.SetTileIndicator(true);
 
-                List<Vector2> tiles = selectedPiece.GetPossibleMoves();
+                List<Vector2> tiles = _selectedPiece.GetPossibleMoves();
                 foreach (Vector2 vec in tiles)
                 {
                     GameBoardController.Current.GameBoard.GridArray[((int)vec.x), ((int)vec.y)].TileIndicator.SetActive(true);
                 }
+
+            }
+            else if(_selectedPiece != null && GameBoardController.Current.GameBoard.GridArray[((int)tile.x), ((int)tile.y)].TileIndicator.activeSelf)
+            {
+                _selectedPiece.MoveChessPiece(((int)tile.x), ((int)tile.y));
+                StateMachine.ChangeState<EnemyTurnChessGameState>();
             }
         }
 
@@ -57,6 +70,7 @@ public class PlayerTurnChessGameState : ChessGameState
         {
             GameBoardController.Current.DisableAllIndicators();
             HighlightDefenders();
+            _selectedPiece = null;
         }
     }
 
@@ -64,7 +78,7 @@ public class PlayerTurnChessGameState : ChessGameState
     {
         foreach (ChessPiece piece in GameBoardController.Current._defenders)
         {
-            Debug.Log("checking piece: " + piece.ChessPieceType);
+            //Debug.Log("checking piece: " + piece.ChessPieceType);
             piece.SetTileIndicator(true);
         }
     }

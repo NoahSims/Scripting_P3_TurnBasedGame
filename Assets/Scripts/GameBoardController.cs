@@ -18,7 +18,7 @@ public class GameBoardController : MonoBehaviour
     [SerializeField] public List<ChessPiece> _defenders;
     //[SerializeField] private List<ChessPiece> _blackTeam;
     [SerializeField] private GameObject _whiteKing = null;
-    [SerializeField] private GameObject _whitePawn = null;
+    [SerializeField] private GameObject _whitePawnPrefab = null;
     [SerializeField] private GameObject[] _whitePawns;
     [SerializeField] private GameObject[] _blackPiecePrefabs;
 
@@ -100,8 +100,8 @@ public class GameBoardController : MonoBehaviour
 
     public void SpawnWhiteKing()
     {
-        GameBoard.GridArray[4, 0].TileContents = ((int)ChessPieceEnum.W_KING);
         _whiteKing.SetActive(true);
+        _whiteKing.GetComponent<ChessPiece>().MoveChessPiece(4, 0);
     }
 
     /*
@@ -156,12 +156,11 @@ public class GameBoardController : MonoBehaviour
             if (GameBoard.GridArray[x, z].TileContents == ((int)ChessPieceEnum.EMPTY))
                 posFound = true;
         }
-
-        GameBoard.GridArray[x, z].TileContents = ((int)ChessPieceEnum.W_PAWN);
         
         // TODO: need to keep track of pieces that are created
-        Vector3 pos = _boardOrigin.transform.position + new Vector3(x * GameBoard.CellSize, 0, z * GameBoard.CellSize) + _pieceOffset;
-        GameObject newPawn = Instantiate(_whitePawn, pos, Quaternion.identity);
+        // Spawn piece and place
+        GameObject newPawn = Instantiate(_whitePawnPrefab, Vector3.zero, Quaternion.identity);
+        newPawn.GetComponent<ChessPiece>().MoveChessPiece(x, z);
     }
 
     public void SpawnBlackPiece()
@@ -181,11 +180,13 @@ public class GameBoardController : MonoBehaviour
                 posFound = true;
         }
 
-        GameBoard.GridArray[x, z].TileContents = ((int)ChessPieceEnum.B_ENEMY);
+        //GameBoard.GridArray[x, z].TileContents = ((int)ChessPieceEnum.B_ENEMY);
 
         // TODO: need to keep track of pieces that are created
-        Vector3 pos = _boardOrigin.transform.position + new Vector3(x * GameBoard.CellSize, 0, z * GameBoard.CellSize) + _pieceOffset;
-        GameObject newPawn = Instantiate(_blackPiecePrefabs[Mathf.FloorToInt(Random.Range(0, 2.999f))], pos, Quaternion.identity);
+        //Vector3 pos = _boardOrigin.transform.position + new Vector3(x * GameBoard.CellSize, 0, z * GameBoard.CellSize) + _pieceOffset;
+        
+        GameObject newPiece = Instantiate(_blackPiecePrefabs[Mathf.FloorToInt(Random.Range(0, 2.999f))], Vector3.zero, Quaternion.identity);
+        newPiece.GetComponent<ChessPiece>().MoveChessPiece(x, z);
     }
 
     public Vector2 GetTileFromWorldSpace(Vector3 worldPos)

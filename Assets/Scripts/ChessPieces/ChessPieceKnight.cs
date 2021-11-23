@@ -8,22 +8,14 @@ public class ChessPieceKnight : ChessPiece
     {
         List<Vector2> result = new List<Vector2>();
 
-        if (GameBoardController.Current.CheckTileContents(xPos + 1, zPos + 2) >= 0)
-            result.Add(new Vector2(xPos + 1, zPos + 2));
-        if (GameBoardController.Current.CheckTileContents(xPos + 2, zPos + 1) >= 0)
-            result.Add(new Vector2(xPos + 2, zPos + 1));
-        if (GameBoardController.Current.CheckTileContents(xPos + 2, zPos - 1) >= 0)
-            result.Add(new Vector2(xPos + 2, zPos - 1));
-        if (GameBoardController.Current.CheckTileContents(xPos + 1, zPos -2) >= 0)
-            result.Add(new Vector2(xPos + 1, zPos - 2));
-        if (GameBoardController.Current.CheckTileContents(xPos - 1, zPos -2) >= 0)
-            result.Add(new Vector2(xPos - 1, zPos - 2));
-        if (GameBoardController.Current.CheckTileContents(xPos - 2, zPos - 1) >= 0)
-            result.Add(new Vector2(xPos - 2, zPos - 1));
-        if (GameBoardController.Current.CheckTileContents(xPos - 2, zPos + 1) >= 0)
-            result.Add(new Vector2(xPos - 2, zPos + 1));
-        if (GameBoardController.Current.CheckTileContents(xPos - 1, zPos + 2) >= 0)
-            result.Add(new Vector2(xPos - 1, zPos + 2));
+        CheckRelativeTile(1, 2, result);
+        CheckRelativeTile(2, 1, result);
+        CheckRelativeTile(2, -1, result);
+        CheckRelativeTile(1, -2, result);
+        CheckRelativeTile(-1, -2, result);
+        CheckRelativeTile(-2, -1, result);
+        CheckRelativeTile(-2, 1, result);
+        CheckRelativeTile(-1, 2, result);
 
         return result;
     }

@@ -8,79 +8,10 @@ public class ChessPieceBishop : ChessPiece
     {
         List<Vector2> result = new List<Vector2>();
 
-        bool validTile = true;
-        int pos = 0;
-
-        while (validTile)
-        {
-            pos++;
-            int tileContent = GameBoardController.Current.CheckTileContents(xPos + pos, zPos + pos);
-            if (tileContent == 0)
-            {
-                result.Add(new Vector2(xPos + pos, zPos + pos));
-            }
-            else
-            {
-                if (tileContent == ((int)ChessPieceEnum.B_ENEMY))
-                    result.Add(new Vector2(xPos + pos, zPos + pos));
-
-                validTile = false;
-            }
-        }
-        validTile = true;
-        pos = 0;
-        while (validTile)
-        {
-            pos++;
-            int tileContent = GameBoardController.Current.CheckTileContents(xPos + pos, zPos - pos);
-            if (tileContent == 0)
-            {
-                result.Add(new Vector2(xPos + pos, zPos - pos));
-            }
-            else
-            {
-                if (tileContent == ((int)ChessPieceEnum.B_ENEMY))
-                    result.Add(new Vector2(xPos + pos, zPos - pos));
-
-                validTile = false;
-            }
-        }
-        validTile = true;
-        pos = 0;
-        while (validTile)
-        {
-            pos++;
-            int tileContent = GameBoardController.Current.CheckTileContents(xPos - pos, zPos - pos);
-            if (tileContent == 0)
-            {
-                result.Add(new Vector2(xPos - pos, zPos - pos));
-            }
-            else
-            {
-                if (tileContent == ((int)ChessPieceEnum.B_ENEMY))
-                    result.Add(new Vector2(xPos - pos, zPos - pos));
-
-                validTile = false;
-            }
-        }
-        validTile = true;
-        pos = 0;
-        while (validTile)
-        {
-            pos++;
-            int tileContent = GameBoardController.Current.CheckTileContents(xPos - pos, zPos + pos);
-            if (tileContent == 0)
-            {
-                result.Add(new Vector2(xPos - pos, zPos + pos));
-            }
-            else
-            {
-                if (tileContent == ((int)ChessPieceEnum.B_ENEMY))
-                    result.Add(new Vector2(xPos - pos, zPos + pos));
-
-                validTile = false;
-            }
-        }
+        CheckTilesInDirection(1, 1, result);
+        CheckTilesInDirection(1, -1, result);
+        CheckTilesInDirection(-1, 1, result);
+        CheckTilesInDirection(-1, -1, result);
 
         return result;
     }

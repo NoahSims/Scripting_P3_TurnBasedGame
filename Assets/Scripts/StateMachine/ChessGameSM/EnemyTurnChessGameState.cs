@@ -20,6 +20,8 @@ public class EnemyTurnChessGameState : ChessGameState
         // hook into events
         InputController.Current.PressedMouse += OnMousePressed;
 
+        Debug.Log("Round Number = " + StateMachine.RoundNumber);
+
         hasClicked = false;
 
         StartCoroutine(EnemyThinkingRoutine(_pauseDuration));
@@ -44,7 +46,9 @@ public class EnemyTurnChessGameState : ChessGameState
     {
         Debug.Log("Enemy thinking...");
 
-        MinMaxTree tree = new MinMaxTree(3);
+        yield return new WaitForSeconds(0.5f); // neccesary so that Minimax doesn't freeze everything before ui can update
+
+        MiniMaxTree tree = new MiniMaxTree(3);
         tree.DetermineMove();
 
         yield return new WaitUntil(() => hasClicked);

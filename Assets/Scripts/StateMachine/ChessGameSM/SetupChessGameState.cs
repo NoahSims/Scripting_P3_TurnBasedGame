@@ -16,6 +16,8 @@ public class SetupChessGameState : ChessGameState
         Debug.Log("Setup: ...Entering");
         SetupBegan?.Invoke();
 
+        GameBoardController.Current.PiecesAllowedToAttack = false;
+
         StartCoroutine(SpawnPieces());
     }
 

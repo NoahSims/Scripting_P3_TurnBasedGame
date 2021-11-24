@@ -82,8 +82,8 @@ public class PlayerTurnChessGameState : ChessGameState
     {
         foreach (ChessPiece piece in GameBoardController.Current._defenders)
         {
-            //Debug.Log("checking piece: " + piece.ChessPieceType);
-            piece.SetTileIndicator(true);
+            if(piece.gameObject.activeSelf)
+                piece.SetTileIndicator(true);
         }
     }
 

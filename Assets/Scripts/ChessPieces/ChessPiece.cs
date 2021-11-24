@@ -24,7 +24,9 @@ public abstract class ChessPiece : MonoBehaviour
             return true;
         }
         // else if on oposite teams
-        else if((tile == ((int)ChessTeamEnum.BLACK) && ChessPieceTeam == ChessTeamEnum.DEFENDER) || ((tile == ((int)ChessTeamEnum.WHITE) || tile == ((int)ChessTeamEnum.DEFENDER)) && ChessPieceTeam == ChessTeamEnum.BLACK))
+        else if(GameBoardController.Current.PiecesAllowedToAttack && 
+            ((tile == ((int)ChessTeamEnum.BLACK) && ChessPieceTeam == ChessTeamEnum.DEFENDER) || 
+            ((tile == ((int)ChessTeamEnum.WHITE) || tile == ((int)ChessTeamEnum.DEFENDER)) && ChessPieceTeam == ChessTeamEnum.BLACK)))
         {
             result.Add(new Vector2(xPos + x, zPos + z));
             return false;

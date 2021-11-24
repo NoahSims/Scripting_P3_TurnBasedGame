@@ -21,6 +21,7 @@ public class GameBoardController : MonoBehaviour
     [SerializeField] private GameObject _whitePawnPrefab = null;
     [SerializeField] private GameObject[] _whitePawns;
     [SerializeField] private GameObject[] _blackPiecePrefabs;
+    public bool PiecesAllowedToAttack = true;
 
     [SerializeField] private bool _debuging = true;
 

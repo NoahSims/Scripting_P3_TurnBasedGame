@@ -5,10 +5,11 @@ using UnityEngine;
 public abstract class ChessPiece : MonoBehaviour
 {
     [Header("Chess Piece")]
-    [SerializeField] protected ChessTeams Team;
+    [SerializeField] public ChessTeamEnum ChessPieceTeam;
     [SerializeField] public ChessPieceEnum ChessPieceType;
     public int xPos;
     public int zPos;
+    public bool inPlay = true;
 
     public abstract List<Vector2> GetPossibleMoves();
 
@@ -16,17 +17,20 @@ public abstract class ChessPiece : MonoBehaviour
     protected bool CheckRelativeTile(int x, int z, List<Vector2> result)
     {
         int tile = GameBoardController.Current.CheckTileContents(xPos + x, zPos + z);
-        if (tile == ((int)ChessPieceEnum.EMPTY))
+
+        if (tile == ((int)ChessTeamEnum.EMPTY))
         {
             result.Add(new Vector2(xPos + x, zPos + z));
             return true;
         }
-        if(tile == ((int)ChessPieceEnum.B_ENEMY))
+        // else if on oposite teams
+        else if((tile == ((int)ChessTeamEnum.BLACK) && ChessPieceTeam == ChessTeamEnum.DEFENDER) || ((tile == ((int)ChessTeamEnum.WHITE) || tile == ((int)ChessTeamEnum.DEFENDER)) && ChessPieceTeam == ChessTeamEnum.BLACK))
         {
             result.Add(new Vector2(xPos + x, zPos + z));
             return false;
         }
-        return false;
+        else
+            return false;
     }
 
     protected void CheckTilesInDirection(int x, int z, List<Vector2> result)
@@ -46,9 +50,14 @@ public abstract class ChessPiece : MonoBehaviour
         if (GameBoardController.Current.CheckTileContents(newX, newZ) > 0)
             GameBoardController.Current.GameBoard.GridArray[newX, newZ].TilePiece.PieceCaptured();
 
-        GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileContents = ((int)ChessPieceEnum.EMPTY);
+        //GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileContents = ((int)ChessPieceEnum.EMPTY);
         GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TilePiece = null;
-        GameBoardController.Current.GameBoard.GridArray[newX, newZ].TileContents = ((int)ChessPieceType);
+        SetChessPiecePosition(newX, newZ);
+    }
+
+    public void SetChessPiecePosition(int newX, int newZ)
+    {
+        //GameBoardController.Current.GameBoard.GridArray[newX, newZ].TileContents = ((int)ChessPieceType);
         GameBoardController.Current.GameBoard.GridArray[newX, newZ].TilePiece = this;
         transform.position = GameBoardController.Current.GetChessWorldSpaceFromTile(newX, newZ);
         xPos = newX;
@@ -58,9 +67,10 @@ public abstract class ChessPiece : MonoBehaviour
     public void PieceCaptured()
     {
         Debug.Log(gameObject.name + ": Captured");
-        GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileContents = ((int)ChessPieceEnum.EMPTY);
+        //GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileContents = ((int)ChessPieceEnum.EMPTY);
         GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TilePiece = null;
         gameObject.SetActive(false);
+        inPlay = false;
     }
 
     public virtual void SetTileIndicator(bool status)
@@ -68,5 +78,3 @@ public abstract class ChessPiece : MonoBehaviour
         GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileIndicator.SetActive(status);
     }
 }
-
-public enum ChessTeams { WHITE, BLACK };

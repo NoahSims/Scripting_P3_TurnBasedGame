@@ -16,7 +16,7 @@ public class GameBoardController : MonoBehaviour
 
     [Header("Game Pieces")]
     [SerializeField] public List<ChessPiece> _defenders;
-    //[SerializeField] private List<ChessPiece> _blackTeam;
+    [SerializeField] public List<ChessPiece> _blackTeam;
     [SerializeField] private GameObject _whiteKing = null;
     [SerializeField] private GameObject _whitePawnPrefab = null;
     [SerializeField] private GameObject[] _whitePawns;
@@ -81,7 +81,7 @@ public class GameBoardController : MonoBehaviour
         {
             for(int row = minRow; row < maxRow; row++)
             {
-                if (GameBoard.GridArray[col, row].TileContents == ((int)ChessPieceEnum.EMPTY))
+                if (GameBoard.GridArray[col, row].TilePiece == null)
                 {
                     GameBoard.GridArray[col, row].TileIndicator.SetActive(true);
                 }
@@ -101,7 +101,7 @@ public class GameBoardController : MonoBehaviour
     public void SpawnWhiteKing()
     {
         _whiteKing.SetActive(true);
-        _whiteKing.GetComponent<ChessPiece>().MoveChessPiece(4, 0);
+        _whiteKing.GetComponent<ChessPiece>().SetChessPiecePosition(4, 0);
     }
 
     /*
@@ -153,14 +153,14 @@ public class GameBoardController : MonoBehaviour
             }
 
             // make sure position is not occupied
-            if (GameBoard.GridArray[x, z].TileContents == ((int)ChessPieceEnum.EMPTY))
+            if (GameBoard.GridArray[x, z].TilePiece == null)
                 posFound = true;
         }
         
         // TODO: need to keep track of pieces that are created
         // Spawn piece and place
         GameObject newPawn = Instantiate(_whitePawnPrefab, Vector3.zero, Quaternion.identity);
-        newPawn.GetComponent<ChessPiece>().MoveChessPiece(x, z);
+        newPawn.GetComponent<ChessPiece>().SetChessPiecePosition(x, z);
     }
 
     public void SpawnBlackPiece()
@@ -176,17 +176,13 @@ public class GameBoardController : MonoBehaviour
             z = Mathf.FloorToInt(Random.Range(5, 7.999f));
 
             // make sure position is not occupied
-            if (GameBoard.GridArray[x, z].TileContents == ((int)ChessPieceEnum.EMPTY))
+            if (GameBoard.GridArray[x, z].TilePiece == null)
                 posFound = true;
         }
-
-        //GameBoard.GridArray[x, z].TileContents = ((int)ChessPieceEnum.B_ENEMY);
-
-        // TODO: need to keep track of pieces that are created
-        //Vector3 pos = _boardOrigin.transform.position + new Vector3(x * GameBoard.CellSize, 0, z * GameBoard.CellSize) + _pieceOffset;
         
         GameObject newPiece = Instantiate(_blackPiecePrefabs[Mathf.FloorToInt(Random.Range(0, 2.999f))], Vector3.zero, Quaternion.identity);
-        newPiece.GetComponent<ChessPiece>().MoveChessPiece(x, z);
+        newPiece.GetComponent<ChessPiece>().SetChessPiecePosition(x, z);
+        _blackTeam.Add(newPiece.GetComponent<ChessPiece>());
     }
 
     public Vector2 GetTileFromWorldSpace(Vector3 worldPos)
@@ -206,20 +202,32 @@ public class GameBoardController : MonoBehaviour
     {
         if (x >= 0 && x < GameBoard.Width && z >= 0 && z < GameBoard.Height)
         {
-            return GameBoard.GridArray[x, z].TileContents;
+            if (GameBoard.GridArray[x, z].TilePiece == null)
+                return 0;
+            else
+                return ((int)GameBoard.GridArray[x, z].TilePiece.ChessPieceTeam);
         }
 
         return -1;
     }
 
-    public bool AttemptPlacePiece(int x, int z, ChessPieceEnum piece)
+    public ChessPiece GetPieceFromTile(int x, int z)
     {
         if (x >= 0 && x < GameBoard.Width && z >= 0 && z < GameBoard.Height)
         {
-            if (GameBoard.GridArray[x, z].TileContents == ((int)ChessPieceEnum.EMPTY) && GameBoard.GridArray[x, z].TileIndicator.activeInHierarchy)
+            return GameBoard.GridArray[x, z].TilePiece;
+        }
+        else
+            return null;
+    }
+
+    public bool AttemptPlacePiece(int x, int z, ChessPiece piece)
+    {
+        if (x >= 0 && x < GameBoard.Width && z >= 0 && z < GameBoard.Height)
+        {
+            if (GameBoard.GridArray[x, z].TilePiece == null && GameBoard.GridArray[x, z].TileIndicator.activeInHierarchy)
             {
-                GameBoard.GridArray[x, z].TileIndicator.SetActive(false);
-                GameBoard.GridArray[x, z].TileContents = (int)piece;
+                piece.SetChessPiecePosition(x, z);
                 return true;
             }
         } 
@@ -241,6 +249,3 @@ public class GameBoardController : MonoBehaviour
         }
     }
 }
-
-// TODO: rework piece numbering system
-public enum ChessPieceEnum { EMPTY = 0, W_KING, W_PAWN, W_KNIGHT, W_BISHOP, W_ROOK, B_ENEMY};

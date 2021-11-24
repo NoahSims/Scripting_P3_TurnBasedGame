@@ -30,13 +30,16 @@ public class PlayerTurnChessGameState : ChessGameState
         {
             // get tile clicked on
             Vector2 tile = GameBoardController.Current.GetTileFromWorldSpace(InputController.Current.GetMouseWorldPosition());
-            int tileContents = GameBoardController.Current.CheckTileContents(((int)tile.x), ((int)tile.y));
+            //int tileContents = GameBoardController.Current.CheckTileContents(((int)tile.x), ((int)tile.y));
+            ChessPiece piece = GameBoardController.Current.GameBoard.GridArray[(int)tile.x, (int)tile.y].TilePiece;
 
             // if a defender was clicked on
-            if (tileContents == ((int)ChessPieceEnum.W_KNIGHT) || tileContents == ((int)ChessPieceEnum.W_BISHOP) || tileContents == ((int)ChessPieceEnum.W_ROOK))
+            if (piece?.ChessPieceTeam == ChessTeamEnum.DEFENDER)
             {
                 GameBoardController.Current.DisableAllIndicators();
-
+                Debug.Log("piece selected: " + piece.ChessPieceType);
+                _selectedPiece = piece;
+                /*
                 // figure out which piece is selected
                 foreach (ChessPiece piece in GameBoardController.Current._defenders)
                 {
@@ -48,9 +51,10 @@ public class PlayerTurnChessGameState : ChessGameState
                         break;
                     }
                 }
+                */
 
                 // highlight possible moves
-                _selectedPiece.SetTileIndicator(true);
+                //_selectedPiece.SetTileIndicator(true);
 
                 List<Vector2> tiles = _selectedPiece.GetPossibleMoves();
                 foreach (Vector2 vec in tiles)

@@ -25,17 +25,33 @@ public class TileGrid
             }
         }
     }
+
+    /*
+    public TileGrid CreateCopy()
+    {
+        TileGrid copy = new TileGrid(Width, Height, CellSize);
+        for (int col = 0; col < Width; col++)
+        {
+            for (int row = 0; row < Height; row++)
+            {
+                copy.GridArray[col, row].TileContents = GridArray[col, row].TileContents;
+            }
+        }
+
+        return copy;
+    }
+    */
 }
 
 public class Tile
 {
-    public int TileContents;
+    //public int TileContents;
     public GameObject TileIndicator;
     public ChessPiece TilePiece;
 
     public Tile()
     {
-        TileContents = 0;
+        //TileContents = 0;
         TileIndicator = null;
         TilePiece = null;
     }

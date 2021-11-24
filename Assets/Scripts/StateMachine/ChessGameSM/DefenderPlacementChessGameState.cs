@@ -66,33 +66,30 @@ public class DefenderPlacementChessGameState : ChessGameState
             switch (_holding)
             {
                 case (1):
-                    if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, ChessPieceEnum.W_KNIGHT))
+                    if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, _defenderKnight.GetComponent<ChessPiece>()))
                     {
                         _defenderKnight.transform.parent = null;
-                        _defenderKnight.gameObject.GetComponent<ChessPieceKnight>().xPos = (int)tileCoords.x;
-                        _defenderKnight.gameObject.GetComponent<ChessPieceKnight>().zPos = (int)tileCoords.y;
                         _holding = 0;
                         _defenderKnightPlaced = true;
+                        _defenderKnight.GetComponent<ChessPiece>().SetTileIndicator(false);
                     }
                     break;
                 case (2):
-                    if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, ChessPieceEnum.W_BISHOP))
+                    if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, _defenderBishop.GetComponent<ChessPiece>()))
                     {
                         _defenderBishop.transform.parent = null;
-                        _defenderBishop.gameObject.GetComponent<ChessPieceBishop>().xPos = (int)tileCoords.x;
-                        _defenderBishop.gameObject.GetComponent<ChessPieceBishop>().zPos = (int)tileCoords.y;
                         _holding = 0;
                         _defenderBishopPlaced = true;
+                        _defenderBishop.GetComponent<ChessPiece>().SetTileIndicator(false);
                     }
                     break;
                 case (3):
-                    if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, ChessPieceEnum.W_ROOK))
+                    if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, _defenderRook.GetComponent<ChessPiece>()))
                     {
                         _defenderRook.transform.parent = null;
-                        _defenderRook.gameObject.GetComponent<ChessPieceRook>().xPos = (int)tileCoords.x;
-                        _defenderRook.gameObject.GetComponent<ChessPieceRook>().zPos = (int)tileCoords.y;
                         _holding = 0;
                         _defenderRookPlaced = true;
+                        _defenderRook.GetComponent<ChessPiece>().SetTileIndicator(false);
                     }
                     break;
             }
@@ -101,24 +98,29 @@ public class DefenderPlacementChessGameState : ChessGameState
         else if(buttonNum == 0)
         {
             Vector2 tileCoords = GameBoardController.Current.GetTileFromWorldSpace(InputController.Current.GetMouseWorldPosition());
-            int piece = GameBoardController.Current.CheckTileContents((int)tileCoords.x, (int)tileCoords.y);
-            switch(piece)
+
+            ChessPiece piece = GameBoardController.Current.GetPieceFromTile(((int)tileCoords.x), ((int)tileCoords.y));
+
+            if (piece?.ChessPieceTeam == ChessTeamEnum.DEFENDER)
             {
-                case (((int)ChessPieceEnum.W_KNIGHT)):
-                    OnDefenderKnightButton();
-                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileContents = ((int)ChessPieceEnum.EMPTY);
-                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileIndicator.SetActive(true);
-                    break;
-                case (((int)ChessPieceEnum.W_BISHOP)):
-                    OnDefenderBishopButton();
-                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileContents = ((int)ChessPieceEnum.EMPTY);
-                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileIndicator.SetActive(true);
-                    break;
-                case (((int)ChessPieceEnum.W_ROOK)):
-                    OnDefenderRookButton();
-                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileContents = ((int)ChessPieceEnum.EMPTY);
-                    GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileIndicator.SetActive(true);
-                    break;
+                switch (piece.ChessPieceType)
+                {
+                    case ((ChessPieceEnum.KNIGHT)):
+                        OnDefenderKnightButton();
+                        GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TilePiece = null;
+                        GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileIndicator.SetActive(true);
+                        break;
+                    case ((ChessPieceEnum.BISHOP)):
+                        OnDefenderBishopButton();
+                        GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TilePiece = null;
+                        GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileIndicator.SetActive(true);
+                        break;
+                    case ((ChessPieceEnum.ROOK)):
+                        OnDefenderRookButton();
+                        GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TilePiece = null;
+                        GameBoardController.Current.GameBoard.GridArray[(int)tileCoords.x, (int)tileCoords.y].TileIndicator.SetActive(true);
+                        break;
+                }
             }
         }
     }

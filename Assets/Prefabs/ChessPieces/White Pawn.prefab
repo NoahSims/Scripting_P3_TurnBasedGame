@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e74778253e1456f4ea1358b0ba0604a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Team: 0
+  ChessPieceTeam: 1
   ChessPieceType: 2
   xPos: 0
   zPos: 0

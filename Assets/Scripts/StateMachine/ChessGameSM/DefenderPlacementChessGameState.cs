@@ -65,7 +65,7 @@ public class DefenderPlacementChessGameState : ChessGameState
 
             switch (_holding)
             {
-                case (1):
+                case (((int)ChessPieceEnum.KNIGHT)):
                     if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, _defenderKnight.GetComponent<ChessPiece>()))
                     {
                         _defenderKnight.transform.parent = null;
@@ -74,7 +74,7 @@ public class DefenderPlacementChessGameState : ChessGameState
                         _defenderKnight.GetComponent<ChessPiece>().SetTileIndicator(false);
                     }
                     break;
-                case (2):
+                case (((int)ChessPieceEnum.BISHOP)):
                     if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, _defenderBishop.GetComponent<ChessPiece>()))
                     {
                         _defenderBishop.transform.parent = null;
@@ -83,7 +83,7 @@ public class DefenderPlacementChessGameState : ChessGameState
                         _defenderBishop.GetComponent<ChessPiece>().SetTileIndicator(false);
                     }
                     break;
-                case (3):
+                case (((int)ChessPieceEnum.ROOK)):
                     if (GameBoardController.Current.AttemptPlacePiece((int)tileCoords.x, (int)tileCoords.y, _defenderRook.GetComponent<ChessPiece>()))
                     {
                         _defenderRook.transform.parent = null;
@@ -135,7 +135,7 @@ public class DefenderPlacementChessGameState : ChessGameState
         if (_holding != 0)
             OnDefenderPlacementCancelHolding(_holding);
 
-        _holding = 1;
+        _holding = ((int)ChessPieceEnum.KNIGHT);
         _defenderKnightPlaced = false;
 
         _defenderKnight.SetActive(true);
@@ -148,7 +148,7 @@ public class DefenderPlacementChessGameState : ChessGameState
         if (_holding != 0)
             OnDefenderPlacementCancelHolding(_holding);
 
-        _holding = 2;
+        _holding = ((int)ChessPieceEnum.BISHOP);
         _defenderBishopPlaced = false;
 
         _defenderBishop.SetActive(true);
@@ -161,7 +161,7 @@ public class DefenderPlacementChessGameState : ChessGameState
         if (_holding != 0)
             OnDefenderPlacementCancelHolding(_holding);
 
-        _holding = 3;
+        _holding = ((int)ChessPieceEnum.ROOK);
         _defenderRookPlaced = false;
 
         _defenderRook.SetActive(true);
@@ -175,15 +175,15 @@ public class DefenderPlacementChessGameState : ChessGameState
 
         switch(pieceNum)
         {
-            case (1):
+            case (((int)ChessPieceEnum.KNIGHT)):
                 _defenderKnight.transform.parent = null;
                 _defenderKnight.SetActive(false);
                 break;
-            case (2):
+            case (((int)ChessPieceEnum.BISHOP)):
                 _defenderBishop.transform.parent = null;
                 _defenderBishop.SetActive(false);
                 break;
-            case (3):
+            case (((int)ChessPieceEnum.ROOK)):
                 _defenderRook.transform.parent = null;
                 _defenderRook.SetActive(false);
                 break;

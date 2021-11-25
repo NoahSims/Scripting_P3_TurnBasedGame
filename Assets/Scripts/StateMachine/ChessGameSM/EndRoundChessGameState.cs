@@ -25,6 +25,15 @@ public class EndRoundChessGameState : ChessGameState
         }
         else
         {
+            foreach (ChessPiece defender in GameBoardController.Current._defenders)
+            {
+                if (!defender.inPlay)
+                {
+                    StateMachine.ChangeState<DefenderRespawnChessGameState>();
+                    yield break;
+                }
+            }
+
             StateMachine.ChangeState<PlayerTurnChessGameState>();
         }
     }

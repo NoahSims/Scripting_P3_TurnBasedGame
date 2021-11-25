@@ -200,11 +200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &100715013 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8579994980808392109, guid: f2de077f7d1725245b9900c51dc0f963, type: 3}
-  m_PrefabInstance: {fileID: 8579994980774786984}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &101083561 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8579994980807958017, guid: f2de077f7d1725245b9900c51dc0f963, type: 3}
@@ -497,17 +492,16 @@ MonoBehaviour:
   - {fileID: 1901482288}
   - {fileID: 711547204}
   - {fileID: 1160858284}
+  _blackTeam: []
+  _whitePawns: []
   _whiteKing: {fileID: 2020839437}
   _whitePawnPrefab: {fileID: 8579994980808392109, guid: f2de077f7d1725245b9900c51dc0f963, type: 3}
-  _whitePawns:
-  - {fileID: 100715013}
-  - {fileID: 1134463089}
-  - {fileID: 433567495}
   _blackPiecePrefabs:
   - {fileID: 6870064245209731839, guid: ee3888dcaeafe794abfe2f0d96f80a3a, type: 3}
   - {fileID: 5755150786402834901, guid: feea14cef76293149aa011ac12351561, type: 3}
   - {fileID: 7126437177175725658, guid: 024c3df8209c03f40aad23191d36ce47, type: 3}
   - {fileID: 7868261530846659940, guid: 73ac160c694870e4bab832fb31624ed1, type: 3}
+  PiecesAllowedToAttack: 1
   _debuging: 1
 --- !u!4 &266488198
 Transform:
@@ -654,11 +648,6 @@ GameObject:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8888707244753503109, guid: 8498ed6a1e412ac4a8318d93718f7d14, type: 3}
   m_PrefabInstance: {fileID: 604310667}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &433567495 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 104878, guid: 48d5ea4ff810d0e4ea36af7235dd5fd7, type: 3}
-  m_PrefabInstance: {fileID: 1753444061}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &433567499 stripped
 Transform:
@@ -1831,11 +1820,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1056727068}
   m_CullTransparentMesh: 1
---- !u!1 &1134463089 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 104878, guid: 48d5ea4ff810d0e4ea36af7235dd5fd7, type: 3}
-  m_PrefabInstance: {fileID: 1967161030}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1134463090 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 473602, guid: 48d5ea4ff810d0e4ea36af7235dd5fd7, type: 3}
@@ -2362,6 +2346,7 @@ GameObject:
   - component: {fileID: 1638105895}
   - component: {fileID: 1638105896}
   - component: {fileID: 1638105897}
+  - component: {fileID: 1638105898}
   m_Layer: 0
   m_Name: StateController
   m_TagString: Untagged
@@ -2476,6 +2461,18 @@ MonoBehaviour:
   _defenderKnight: {fileID: 234996168}
   _defenderBishop: {fileID: 754631815}
   _defenderRook: {fileID: 1198468451}
+--- !u!114 &1638105898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638105889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0b800075c5fdf24590abc9aed1324bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1674702156
 PrefabInstance:
   m_ObjectHideFlags: 0

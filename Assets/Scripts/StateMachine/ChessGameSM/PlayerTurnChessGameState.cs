@@ -39,22 +39,6 @@ public class PlayerTurnChessGameState : ChessGameState
                 GameBoardController.Current.DisableAllIndicators();
                 Debug.Log("piece selected: " + piece.ChessPieceType);
                 _selectedPiece = piece;
-                /*
-                // figure out which piece is selected
-                foreach (ChessPiece piece in GameBoardController.Current._defenders)
-                {
-                    //Debug.Log("checking piece: " + piece.ChessPieceType);
-                    if (tileContents == ((int)piece.ChessPieceType))
-                    {
-                        Debug.Log("piece selected: " + piece.ChessPieceType);
-                        _selectedPiece = piece;
-                        break;
-                    }
-                }
-                */
-
-                // highlight possible moves
-                //_selectedPiece.SetTileIndicator(true);
 
                 List<Vector2> tiles = _selectedPiece.GetPossibleMoves();
                 foreach (Vector2 vec in tiles)

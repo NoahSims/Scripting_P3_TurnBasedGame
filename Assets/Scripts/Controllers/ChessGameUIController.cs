@@ -40,6 +40,9 @@ public class ChessGameUIController : MonoBehaviour
         DefenderPlacementChessGameState.DefenderPlacementEnded += OnDefenderPlacementEnded;
         DefenderPlacementChessGameState.DefenderPlacementCancelHolding += OnDefenderPlacementCancelHolding;
         DefenderPlacementChessGameState.DefenderPlacementContinueReady += OnDefenderPlacementContinueReady;
+        DefenderRespawnChessGameState.DefenderRespawnBegan += OnDefenderRespawnBegan;
+        DefenderRespawnChessGameState.DefenderRespawnEnded += OnDefenderRespawnEnded;
+        DefenderRespawnChessGameState.DefenderMenuReset += OnDefenderPlacementCancelHolding;
         WinChessGameState.PlayerWon += OnPlayerWon;
     }
 
@@ -55,6 +58,9 @@ public class ChessGameUIController : MonoBehaviour
         DefenderPlacementChessGameState.DefenderPlacementEnded -= OnDefenderPlacementEnded;
         DefenderPlacementChessGameState.DefenderPlacementCancelHolding -= OnDefenderPlacementCancelHolding;
         DefenderPlacementChessGameState.DefenderPlacementContinueReady -= OnDefenderPlacementContinueReady;
+        DefenderRespawnChessGameState.DefenderRespawnBegan -= OnDefenderRespawnBegan;
+        DefenderRespawnChessGameState.DefenderRespawnEnded -= OnDefenderRespawnEnded;
+        DefenderRespawnChessGameState.DefenderMenuReset -= OnDefenderPlacementCancelHolding;
         WinChessGameState.PlayerWon -= OnPlayerWon;
     }
 
@@ -127,15 +133,15 @@ public class ChessGameUIController : MonoBehaviour
     {
         switch(pieceNum)
         {
-            case (1):
+            case (((int)ChessPieceEnum.KNIGHT)):
                 defenderPlacementKnightButton.interactable = true;
                 defenderPlacementKnightObject.SetActive(true);
                 break;
-            case (2):
+            case (((int)ChessPieceEnum.BISHOP)):
                 defenderPlacementBishopButton.interactable = true;
                 defenderPlacementBishopObject.SetActive(true);
                 break;
-            case (3):
+            case (((int)ChessPieceEnum.ROOK)):
                 defenderPlacementRookButton.interactable = true;
                 defenderPlacementRookObject.SetActive(true);
                 break;
@@ -195,6 +201,16 @@ public class ChessGameUIController : MonoBehaviour
     void OnDefenderPlacementContinueReady(bool status)
     {
         defenderPlacementContinueButton.gameObject.SetActive(status);
+    }
+
+    void OnDefenderRespawnBegan()
+    {
+        _defenderPlacementScreen.gameObject.SetActive(true);
+    }
+
+    void OnDefenderRespawnEnded()
+    {
+        _defenderPlacementScreen.gameObject.SetActive(false);
     }
     #endregion
 }

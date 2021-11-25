@@ -17,9 +17,9 @@ public class GameBoardController : MonoBehaviour
     [Header("Game Pieces")]
     [SerializeField] public List<ChessPiece> _defenders;
     [SerializeField] public List<ChessPiece> _blackTeam;
+    [SerializeField] public List<ChessPiece> _whitePawns;
     [SerializeField] private GameObject _whiteKing = null;
     [SerializeField] private GameObject _whitePawnPrefab = null;
-    [SerializeField] private GameObject[] _whitePawns;
     [SerializeField] private GameObject[] _blackPiecePrefabs;
     public bool PiecesAllowedToAttack = true;
 
@@ -27,6 +27,8 @@ public class GameBoardController : MonoBehaviour
 
     public TileGrid GameBoard = null;
 
+    //---------------------------------------------------------------------------------------------------------------
+    #region Board Instantiation
     private void Awake()
     {
         Current = this;
@@ -40,14 +42,6 @@ public class GameBoardController : MonoBehaviour
         _pieceOffset = new Vector3(GameBoard.CellSize * 0.5f, _pieceYOffest, GameBoard.CellSize * 0.5f);
 
         DisableAllPieces();
-    }
-
-    private void FixedUpdate()
-    {
-        if(_debuging)
-        {
-            DebugLines();
-        }
     }
 
     public void InstantiateBoard()
@@ -64,7 +58,33 @@ public class GameBoardController : MonoBehaviour
             }
         }
     }
+    #endregion
+    //---------------------------------------------------------------------------------------------------------------
+    #region Debugging
+    private void FixedUpdate()
+    {
+        if (_debuging)
+        {
+            DebugLines();
+        }
+    }
 
+    private void DebugLines()
+    {
+        for (int col = 0; col < GameBoard.Width; col++)
+        {
+            for (int row = 0; row < GameBoard.Height; row++)
+            {
+                Vector3 tilePos = _boardOrigin.transform.position + new Vector3(col * GameBoard.CellSize, 0.01f, row * GameBoard.CellSize);
+                //Gizmos.DrawLine(tilePos, tilePos + new Vector3(GameBoard.CellSize, 0, 0));
+                Debug.DrawLine(tilePos, tilePos + new Vector3(GameBoard.CellSize, 0, 0), Color.red);
+                Debug.DrawLine(tilePos, tilePos + new Vector3(0, 0, GameBoard.CellSize), Color.red);
+            }
+        }
+    }
+    #endregion
+    //---------------------------------------------------------------------------------------------------------------
+    #region Indicators
     public void DisableAllIndicators()
     {
         for (int col = 0; col < GameBoard.Width; col++)
@@ -93,47 +113,15 @@ public class GameBoardController : MonoBehaviour
     private void DisableAllPieces()
     {
         _whiteKing.SetActive(false);
-        for(int i = 0; i < _whitePawns.Length; i++)
-        {
-            _whitePawns[i].SetActive(false);
-        }
     }
-
+    #endregion
+    //---------------------------------------------------------------------------------------------------------------
+    #region Piece Spawning
     public void SpawnWhiteKing()
     {
         _whiteKing.SetActive(true);
         _whiteKing.GetComponent<ChessPiece>().SetChessPiecePosition(4, 0);
     }
-
-    /*
-    public void SpawnWhitePawns()
-    {
-        for(int i = 0; i < _whitePawns.Length; i++)
-        {
-            bool posFound = false;
-            int x = 0;
-            int z = 0;
-
-            while(!posFound)
-            {
-                x = Mathf.FloorToInt(Random.Range(0, 7.999f));
-                z = Mathf.FloorToInt(Random.Range(0, 3.999f));
-
-                if((x > 1) && (x < 6))
-                {
-                    x = Mathf.FloorToInt(Random.Range(0, 7.999f));
-                }
-
-                if (GameBoard.GridArray[x, z] == ((int)ChessPieceEnum.EMPTY))
-                    posFound = true;
-            }
-
-            GameBoard.GridArray[x, z] = ((int)ChessPieceEnum.W_PAWN);
-            _whitePawns[i].SetActive(true);
-            _whitePawns[i].transform.position = _boardOrigin.transform.position + new Vector3(x * GameBoard.CellSize, 0, z * GameBoard.CellSize) + _pieceOffset;
-        }
-    }
-    */
 
     public void SpawnWhitePawn()
     {
@@ -162,6 +150,7 @@ public class GameBoardController : MonoBehaviour
         // Spawn piece and place
         GameObject newPawn = Instantiate(_whitePawnPrefab, Vector3.zero, Quaternion.identity);
         newPawn.GetComponent<ChessPiece>().SetChessPiecePosition(x, z);
+        _whitePawns.Add(newPawn.GetComponent<ChessPiece>());
     }
 
     public void SpawnBlackPiece()
@@ -185,7 +174,9 @@ public class GameBoardController : MonoBehaviour
         newPiece.GetComponent<ChessPiece>().SetChessPiecePosition(x, z);
         _blackTeam.Add(newPiece.GetComponent<ChessPiece>());
     }
-
+    #endregion
+    //---------------------------------------------------------------------------------------------------------------
+    #region Board Manipulation & Helper Functions
     public Vector2 GetTileFromWorldSpace(Vector3 worldPos)
     {
         worldPos -= _boardOrigin.transform.position;
@@ -235,18 +226,6 @@ public class GameBoardController : MonoBehaviour
         
         return false;
     }
-
-    private void DebugLines()
-    {
-        for (int col = 0; col < GameBoard.Width; col++)
-        {
-            for (int row = 0; row < GameBoard.Height; row++)
-            {
-                Vector3 tilePos = _boardOrigin.transform.position + new Vector3(col * GameBoard.CellSize, 0.01f, row * GameBoard.CellSize);
-                //Gizmos.DrawLine(tilePos, tilePos + new Vector3(GameBoard.CellSize, 0, 0));
-                Debug.DrawLine(tilePos, tilePos + new Vector3(GameBoard.CellSize, 0, 0), Color.red);
-                Debug.DrawLine(tilePos, tilePos + new Vector3(0, 0, GameBoard.CellSize), Color.red);
-            }
-        }
-    }
+    #endregion
+    //---------------------------------------------------------------------------------------------------------------
 }

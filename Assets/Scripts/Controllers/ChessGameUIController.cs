@@ -12,14 +12,18 @@ public class ChessGameUIController : MonoBehaviour
     public static Action DefenderPlacementBishopButtonPressed;
     public static Action DefenderPlacementRookButtonPressed;
 
+    [Header("Turn Screens")]
     [SerializeField] Text _enemyThinkingText = null;
     [SerializeField] Text _playerTurnCounter = null;
+
+    [Header("Other Game States")]
     [SerializeField] Text _boardGeneratingText = null;
     [SerializeField] Canvas _winScreen = null;
-    [SerializeField] Button _skipTurnButton = null;
+    [SerializeField] Text _winLoseText = null;
 
     [Header("Defender Placement State")]
     [SerializeField] Canvas _defenderPlacementScreen = null;
+    [SerializeField] Text _defenderPlacementText = null;
     [SerializeField] Button defenderPlacementKnightButton = null;
     [SerializeField] GameObject defenderPlacementKnightObject = null;
     [SerializeField] Button defenderPlacementBishopButton = null;
@@ -27,6 +31,9 @@ public class ChessGameUIController : MonoBehaviour
     [SerializeField] Button defenderPlacementRookButton = null;
     [SerializeField] GameObject defenderPlacementRookObject = null;
     [SerializeField] Button defenderPlacementContinueButton = null;
+
+    [Header("Defender Respawn State")]
+    [SerializeField] Text _defenderRespawnText = null;
 
     private void OnEnable()
     {
@@ -42,8 +49,10 @@ public class ChessGameUIController : MonoBehaviour
         DefenderPlacementChessGameState.DefenderPlacementContinueReady += OnDefenderPlacementContinueReady;
         DefenderRespawnChessGameState.DefenderRespawnBegan += OnDefenderRespawnBegan;
         DefenderRespawnChessGameState.DefenderRespawnEnded += OnDefenderRespawnEnded;
-        DefenderRespawnChessGameState.DefenderMenuReset += OnDefenderPlacementCancelHolding;
+        DefenderRespawnChessGameState.DefenderMenuReset += OnDefenderRespawnMenuReset;
+        DefenderRespawnChessGameState.DefenderRespawnContinueReady += OnDefenderPlacementContinueReady;
         WinChessGameState.PlayerWon += OnPlayerWon;
+        LoseChessGameState.PlayerLost += OnPlayerLost;
     }
 
     private void OnDisable()
@@ -60,8 +69,10 @@ public class ChessGameUIController : MonoBehaviour
         DefenderPlacementChessGameState.DefenderPlacementContinueReady -= OnDefenderPlacementContinueReady;
         DefenderRespawnChessGameState.DefenderRespawnBegan -= OnDefenderRespawnBegan;
         DefenderRespawnChessGameState.DefenderRespawnEnded -= OnDefenderRespawnEnded;
-        DefenderRespawnChessGameState.DefenderMenuReset -= OnDefenderPlacementCancelHolding;
+        DefenderRespawnChessGameState.DefenderMenuReset -= OnDefenderRespawnMenuReset;
+        DefenderRespawnChessGameState.DefenderRespawnContinueReady -= OnDefenderPlacementContinueReady;
         WinChessGameState.PlayerWon -= OnPlayerWon;
+        LoseChessGameState.PlayerLost -= OnPlayerLost;
     }
 
     private void Start()
@@ -75,7 +86,7 @@ public class ChessGameUIController : MonoBehaviour
         _defenderPlacementScreen.gameObject.SetActive(false);
         defenderPlacementContinueButton.gameObject.SetActive(false);
         _winScreen.gameObject.SetActive(false);
-        _skipTurnButton.gameObject.SetActive(false);
+        //_skipTurnButton.gameObject.SetActive(false);
     }
 
     #region Buttons
@@ -154,13 +165,11 @@ public class ChessGameUIController : MonoBehaviour
     {
         _playerTurnCounter.gameObject.SetActive(true);
         _playerTurnCounter.text = "Player turn: " + turnNumber.ToString();
-        _skipTurnButton.gameObject.SetActive(true);
     }
 
     void OnPlayerTurnEnded()
     {
         _playerTurnCounter.gameObject.SetActive(false);
-        _skipTurnButton.gameObject.SetActive(false);
     }
 
     void OnEnemyTurnBegan()
@@ -186,15 +195,24 @@ public class ChessGameUIController : MonoBehaviour
     void OnPlayerWon()
     {
         _winScreen.gameObject.SetActive(true);
+        _winLoseText.text = "YOU WIN";
+    }
+
+    void OnPlayerLost()
+    {
+        _winScreen.gameObject.SetActive(true);
+        _winLoseText.text = "YOU LOSE";
     }
 
     void OnDefenderPlacementBegan()
     {
         _defenderPlacementScreen.gameObject.SetActive(true);
+        _defenderPlacementText.gameObject.SetActive(true);
     }
 
     void OnDefenderPlacementEnded()
     {
+        _defenderPlacementText.gameObject.SetActive(false);
         _defenderPlacementScreen.gameObject.SetActive(false);
     }
 
@@ -206,11 +224,33 @@ public class ChessGameUIController : MonoBehaviour
     void OnDefenderRespawnBegan()
     {
         _defenderPlacementScreen.gameObject.SetActive(true);
+        _defenderRespawnText.gameObject.SetActive(true);
+        OnDefenderPlacementContinueReady(false);
     }
 
     void OnDefenderRespawnEnded()
     {
+        _defenderRespawnText.gameObject.SetActive(false);
         _defenderPlacementScreen.gameObject.SetActive(false);
+    }
+
+    void OnDefenderRespawnMenuReset(int pieceNum)
+    {
+        switch (pieceNum)
+        {
+            case (((int)ChessPieceEnum.KNIGHT)):
+                defenderPlacementKnightButton.interactable = false;
+                defenderPlacementKnightObject.SetActive(true);
+                break;
+            case (((int)ChessPieceEnum.BISHOP)):
+                defenderPlacementBishopButton.interactable = false;
+                defenderPlacementBishopObject.SetActive(true);
+                break;
+            case (((int)ChessPieceEnum.ROOK)):
+                defenderPlacementRookButton.interactable = false;
+                defenderPlacementRookObject.SetActive(true);
+                break;
+        }
     }
     #endregion
 }

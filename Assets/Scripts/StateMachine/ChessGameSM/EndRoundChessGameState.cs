@@ -18,10 +18,17 @@ public class EndRoundChessGameState : ChessGameState
     {
         yield return new WaitForEndOfFrame();
 
-        if(StateMachine.RoundNumber >= _finalRoundNumber)
+        if(!GameBoardController.Current._whiteKing.GetComponent<ChessPiece>().inPlay)
+        {
+            Debug.Log("King Captured, ending game");
+            StateMachine.ChangeState<LoseChessGameState>();
+            yield break;
+        }
+        else if(StateMachine.RoundNumber >= _finalRoundNumber)
         {
             Debug.Log("Round Max reached, ending game");
             StateMachine.ChangeState<WinChessGameState>();
+            yield break;
         }
         else
         {

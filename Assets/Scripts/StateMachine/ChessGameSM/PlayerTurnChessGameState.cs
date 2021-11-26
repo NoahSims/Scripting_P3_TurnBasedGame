@@ -31,7 +31,7 @@ public class PlayerTurnChessGameState : ChessGameState
             // get tile clicked on
             Vector2 tile = GameBoardController.Current.GetTileFromWorldSpace(InputController.Current.GetMouseWorldPosition());
             //int tileContents = GameBoardController.Current.CheckTileContents(((int)tile.x), ((int)tile.y));
-            ChessPiece piece = GameBoardController.Current.GameBoard.GridArray[(int)tile.x, (int)tile.y].TilePiece;
+            ChessPiece piece = GameBoardController.Current.GetPieceFromTile((int)tile.x, (int)tile.y);
 
             // if a defender was clicked on
             if (piece?.ChessPieceTeam == ChessTeamEnum.DEFENDER)

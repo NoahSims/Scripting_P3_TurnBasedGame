@@ -18,7 +18,7 @@ public class GameBoardController : MonoBehaviour
     [SerializeField] public List<ChessPiece> _defenders;
     [SerializeField] public List<ChessPiece> _blackTeam;
     [SerializeField] public List<ChessPiece> _whitePawns;
-    [SerializeField] private GameObject _whiteKing = null;
+    [SerializeField] public GameObject _whiteKing = null;
     [SerializeField] private GameObject _whitePawnPrefab = null;
     [SerializeField] private GameObject[] _blackPiecePrefabs;
     public bool PiecesAllowedToAttack = true;

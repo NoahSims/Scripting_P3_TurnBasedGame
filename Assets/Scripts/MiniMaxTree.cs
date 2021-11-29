@@ -45,7 +45,7 @@ public class MiniMaxTree
                         bestMoveList.Add(new PieceMove(piece, move));
                         maxScore = childScore;
                     }
-                    else if (childScore == maxScore)
+                    else if (childScore == maxScore || bestMoveList.Count == 0)
                     {
                         bestMoveList.Add(new PieceMove(piece, move));
                         maxScore = childScore;
@@ -68,6 +68,7 @@ public class MiniMaxTree
 
         // select random move from best moves
         int randNum = Random.Range(0, bestMoveList.Count);
+        Debug.Log("random value = " + randNum + "; count = " + bestMoveList.Count);
         bestMoveList[randNum].piece.MoveChessPiece(((int)bestMoveList[randNum].move.x), ((int)bestMoveList[randNum].move.y));
     }
 }

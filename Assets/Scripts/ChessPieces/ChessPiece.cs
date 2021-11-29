@@ -47,14 +47,23 @@ public abstract class ChessPiece : MonoBehaviour
         }
     }
 
-    public void MoveChessPiece(int newX, int newZ)
+    // if a piece is captured, returns reference to captured piece, else returns null
+    public ChessPiece MoveChessPiece(int newX, int newZ)
     {
+        ChessPiece capturedPiece = null;
+
         if (GameBoardController.Current.CheckTileContents(newX, newZ) > 0)
-            GameBoardController.Current.GameBoard.GridArray[newX, newZ].TilePiece.PieceCaptured();
+        {
+            capturedPiece = GameBoardController.Current.GameBoard.GridArray[newX, newZ].TilePiece;
+            capturedPiece.PieceCaptured();
+            Debug.Log(capturedPiece.gameObject.name + ": Captured by : " + gameObject.name);
+        }
 
         //GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileContents = ((int)ChessPieceEnum.EMPTY);
         GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TilePiece = null;
         SetChessPiecePosition(newX, newZ);
+
+        return capturedPiece;
     }
 
     public void SetChessPiecePosition(int newX, int newZ)
@@ -68,7 +77,7 @@ public abstract class ChessPiece : MonoBehaviour
 
     public void PieceCaptured()
     {
-        Debug.Log(gameObject.name + ": Captured");
+        //Debug.Log(gameObject.name + ": Captured");
         //GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileContents = ((int)ChessPieceEnum.EMPTY);
         GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TilePiece = null;
         gameObject.SetActive(false);

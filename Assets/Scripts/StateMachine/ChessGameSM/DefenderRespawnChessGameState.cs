@@ -13,10 +13,14 @@ public class DefenderRespawnChessGameState : ChessGameState
     private ChessPiece _missingPiece = null;
     private ChessPiece _spentPawn = null;
 
+    private bool _isMissingPiecePlaced = false;
+
     public override void Enter()
     {
         Debug.Log("Defender Respawn: ... Entering");
         DefenderRespawnBegan?.Invoke();
+
+        _isMissingPiecePlaced = false;
 
         DetermineMissingPiece();
         SetUI();
@@ -25,6 +29,7 @@ public class DefenderRespawnChessGameState : ChessGameState
         // hook into events
         InputController.Current.PressedMouse += OnMousePressed;
         ChessGameUIController.ContinueButtonPressed += OnContinue;
+        ChessGameUIController.UndoButtonPressed += OnUndo;
     }
 
     private void DetermineMissingPiece()
@@ -52,7 +57,7 @@ public class DefenderRespawnChessGameState : ChessGameState
 
     private void OnMousePressed(int buttonNum)
     {
-        if(buttonNum == 0)
+        if(buttonNum == 0 && !_isMissingPiecePlaced)
         {
             // get tile clicked on
             Vector2 tile = GameBoardController.Current.GetTileFromWorldSpace(InputController.Current.GetMouseWorldPosition());
@@ -70,6 +75,8 @@ public class DefenderRespawnChessGameState : ChessGameState
 
                 GameBoardController.Current.DisableAllIndicators();
                 DefenderRespawnContinueReady?.Invoke(true);
+                _isMissingPiecePlaced = true;
+                SetUI();
             }
         }
     }
@@ -79,11 +86,32 @@ public class DefenderRespawnChessGameState : ChessGameState
         StateMachine.ChangeState<PlayerTurnChessGameState>();
     }
 
+    private void OnUndo()
+    {
+        if (_isMissingPiecePlaced)
+        {
+            // remove placed defender
+            _missingPiece.PieceCaptured();
+
+            // replace pawn
+            _spentPawn.gameObject.SetActive(true);
+            _spentPawn.inPlay = true;
+            _spentPawn.SetChessPiecePosition(_spentPawn.xPos, _spentPawn.zPos);
+
+            // reset state
+            SetPawnIndicators();
+            SetUI();
+            DefenderRespawnContinueReady?.Invoke(false);
+            _isMissingPiecePlaced = false;
+        }
+    }
+
     public override void Exit()
     {
         // unhook from events
         InputController.Current.PressedMouse -= OnMousePressed;
         ChessGameUIController.ContinueButtonPressed -= OnContinue;
+        ChessGameUIController.UndoButtonPressed -= OnUndo;
 
         DefenderRespawnEnded?.Invoke();
         Debug.Log("Defender Respawn: Exiting ...");

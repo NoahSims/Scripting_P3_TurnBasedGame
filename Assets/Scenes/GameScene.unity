@@ -332,19 +332,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyThinkingText: {fileID: 354657434}
   _playerTurnCounter: {fileID: 1447627512}
+  _playerTurnContinueButton: {fileID: 2053246213}
+  _playerTurnUndoButton: {fileID: 340353462}
   _boardGeneratingText: {fileID: 715151136}
   _winScreen: {fileID: 721670354}
-  _winLoseText: {fileID: 0}
+  _winLoseText: {fileID: 968730587}
   _defenderPlacementScreen: {fileID: 1179804127}
   _defenderPlacementText: {fileID: 1056727070}
-  defenderPlacementKnightButton: {fileID: 2086161069}
-  defenderPlacementKnightObject: {fileID: 516188423}
-  defenderPlacementBishopButton: {fileID: 629525100}
-  defenderPlacementBishopObject: {fileID: 368564836}
-  defenderPlacementRookButton: {fileID: 87760588}
-  defenderPlacementRookObject: {fileID: 394054331}
-  defenderPlacementContinueButton: {fileID: 613309971}
+  _defenderPlacementKnightButton: {fileID: 2086161069}
+  _defenderPlacementKnightObject: {fileID: 516188423}
+  _defenderPlacementBishopButton: {fileID: 629525100}
+  _defenderPlacementBishopObject: {fileID: 368564836}
+  _defenderPlacementRookButton: {fileID: 87760588}
+  _defenderPlacementRookObject: {fileID: 394054331}
+  _defenderPlacementContinueButton: {fileID: 613309971}
   _defenderRespawnText: {fileID: 86513766}
+  _defenderRespawnUndoButton: {fileID: 1497718103}
 --- !u!1001 &120592918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -722,7 +725,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 111628826}
         m_TargetAssemblyTypeName: ChessGameUIController, Assembly-CSharp
-        m_MethodName: SkipButton
+        m_MethodName: UndoButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1966,7 +1969,7 @@ GameObject:
   - component: {fileID: 968730588}
   - component: {fileID: 968730587}
   m_Layer: 0
-  m_Name: WinText_txt
+  m_Name: WinLoseText_txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2187,7 +2190,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Continue
+  m_Text: Undo
 --- !u!222 &1144255163
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2788,7 +2791,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 111628826}
         m_TargetAssemblyTypeName: ChessGameUIController, Assembly-CSharp
-        m_MethodName: ContinueButton
+        m_MethodName: UndoButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2851,6 +2854,7 @@ GameObject:
   - component: {fileID: 1638105894}
   - component: {fileID: 1638105895}
   - component: {fileID: 1638105896}
+  - component: {fileID: 1638105899}
   - component: {fileID: 1638105897}
   - component: {fileID: 1638105898}
   m_Layer: 0
@@ -2977,6 +2981,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a0b800075c5fdf24590abc9aed1324bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1638105899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638105889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fffd88213d56933429565036175a1b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &1674702156
@@ -3634,7 +3650,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 111628826}
         m_TargetAssemblyTypeName: ChessGameUIController, Assembly-CSharp
-        m_MethodName: SkipButton
+        m_MethodName: ContinueButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

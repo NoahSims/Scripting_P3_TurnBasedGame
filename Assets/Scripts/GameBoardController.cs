@@ -174,6 +174,13 @@ public class GameBoardController : MonoBehaviour
         newPiece.GetComponent<ChessPiece>().SetChessPiecePosition(x, z);
         _blackTeam.Add(newPiece.GetComponent<ChessPiece>());
     }
+
+    public void SpawnBlackPieceAt(int xPos, int zPos)
+    {
+        GameObject newPiece = Instantiate(_blackPiecePrefabs[Mathf.FloorToInt(Random.Range(0, 2.999f))], Vector3.zero, Quaternion.identity);
+        newPiece.GetComponent<ChessPiece>().SetChessPiecePosition(xPos, zPos);
+        _blackTeam.Add(newPiece.GetComponent<ChessPiece>());
+    }
     #endregion
     //---------------------------------------------------------------------------------------------------------------
     #region Board Manipulation & Helper Functions

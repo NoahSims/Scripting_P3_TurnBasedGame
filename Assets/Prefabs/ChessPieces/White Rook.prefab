@@ -113,3 +113,6 @@ MonoBehaviour:
   ChessPieceType: 5
   xPos: 0
   zPos: 0
+  inPlay: 1
+  _moveSound: {fileID: 8300000, guid: 2f2bc50f4a1443f459d8224f4754c47a, type: 3}
+  _captureSound: {fileID: 8300000, guid: a722210535758f441b34107dce9b2c17, type: 3}

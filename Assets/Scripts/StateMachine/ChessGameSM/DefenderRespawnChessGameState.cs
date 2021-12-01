@@ -71,7 +71,7 @@ public class DefenderRespawnChessGameState : ChessGameState
                 // respawn missing piece
                 _missingPiece.inPlay = true;
                 _missingPiece.gameObject.SetActive(true);
-                _missingPiece.SetChessPiecePosition(_spentPawn.xPos, _spentPawn.zPos);
+                _missingPiece.SetChessPiecePosition(_spentPawn.xPos, _spentPawn.zPos, true);
 
                 GameBoardController.Current.DisableAllIndicators();
                 DefenderRespawnContinueReady?.Invoke(true);
@@ -96,7 +96,7 @@ public class DefenderRespawnChessGameState : ChessGameState
             // replace pawn
             _spentPawn.gameObject.SetActive(true);
             _spentPawn.inPlay = true;
-            _spentPawn.SetChessPiecePosition(_spentPawn.xPos, _spentPawn.zPos);
+            _spentPawn.SetChessPiecePosition(_spentPawn.xPos, _spentPawn.zPos, true);
 
             // reset state
             SetPawnIndicators();

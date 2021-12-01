@@ -5,21 +5,27 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    void Start()
-    {
-        // Only specifying the sceneName or sceneBuildIndex will load the Scene with the Single mode
-        //SceneManager.LoadScene("GameScene", LoadSceneMode.Additive);
-    }
+    [SerializeField] AudioClip _buttonSound = null;
 
     public void StartButton()
     {
+        PlayButtonSound();
         Debug.Log("Starting game");
         SceneManager.LoadScene("GameScene");
     }
 
     public void ExitButton()
     {
+        PlayButtonSound();
         Debug.Log("quiting");
         Application.Quit();
+    }
+
+    private void PlayButtonSound()
+    {
+        if (_buttonSound != null)
+        {
+            AudioHelper.PlayClip2D(_buttonSound, 1f);
+        }
     }
 }

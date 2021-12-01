@@ -120,7 +120,7 @@ public class GameBoardController : MonoBehaviour
     public void SpawnWhiteKing()
     {
         _whiteKing.SetActive(true);
-        _whiteKing.GetComponent<ChessPiece>().SetChessPiecePosition(4, 0);
+        _whiteKing.GetComponent<ChessPiece>().SetChessPiecePosition(4, 0, true);
     }
 
     public void SpawnWhitePawn()
@@ -146,10 +146,9 @@ public class GameBoardController : MonoBehaviour
                 posFound = true;
         }
         
-        // TODO: need to keep track of pieces that are created
         // Spawn piece and place
         GameObject newPawn = Instantiate(_whitePawnPrefab, Vector3.zero, Quaternion.identity);
-        newPawn.GetComponent<ChessPiece>().SetChessPiecePosition(x, z);
+        newPawn.GetComponent<ChessPiece>().SetChessPiecePosition(x, z, true);
         _whitePawns.Add(newPawn.GetComponent<ChessPiece>());
     }
 
@@ -171,14 +170,14 @@ public class GameBoardController : MonoBehaviour
         }
         
         GameObject newPiece = Instantiate(_blackPiecePrefabs[Mathf.FloorToInt(Random.Range(0, 2.999f))], Vector3.zero, Quaternion.identity);
-        newPiece.GetComponent<ChessPiece>().SetChessPiecePosition(x, z);
+        newPiece.GetComponent<ChessPiece>().SetChessPiecePosition(x, z, true);
         _blackTeam.Add(newPiece.GetComponent<ChessPiece>());
     }
 
     public void SpawnBlackPieceAt(int xPos, int zPos)
     {
         GameObject newPiece = Instantiate(_blackPiecePrefabs[Mathf.FloorToInt(Random.Range(0, 2.999f))], Vector3.zero, Quaternion.identity);
-        newPiece.GetComponent<ChessPiece>().SetChessPiecePosition(xPos, zPos);
+        newPiece.GetComponent<ChessPiece>().SetChessPiecePosition(xPos, zPos, true);
         _blackTeam.Add(newPiece.GetComponent<ChessPiece>());
     }
     #endregion
@@ -226,7 +225,7 @@ public class GameBoardController : MonoBehaviour
         {
             if (GameBoard.GridArray[x, z].TilePiece == null && GameBoard.GridArray[x, z].TileIndicator.activeInHierarchy)
             {
-                piece.SetChessPiecePosition(x, z);
+                piece.SetChessPiecePosition(x, z, true);
                 return true;
             }
         } 

@@ -349,6 +349,7 @@ MonoBehaviour:
   _defenderPlacementContinueButton: {fileID: 613309971}
   _defenderRespawnText: {fileID: 86513766}
   _defenderRespawnUndoButton: {fileID: 1497718103}
+  _buttonSound: {fileID: 8300000, guid: 1fb092be4938e52479a6ee81aea6f955, type: 3}
 --- !u!1001 &120592918
 PrefabInstance:
   m_ObjectHideFlags: 0

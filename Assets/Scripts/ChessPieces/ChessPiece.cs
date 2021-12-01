@@ -10,6 +10,8 @@ public abstract class ChessPiece : MonoBehaviour
     public int xPos;
     public int zPos;
     public bool inPlay = true;
+    [SerializeField] private AudioClip _moveSound = null;
+    [SerializeField] private AudioClip _captureSound = null;
 
     public abstract List<Vector2> GetPossibleMoves();
 
@@ -57,28 +59,31 @@ public abstract class ChessPiece : MonoBehaviour
             capturedPiece = GameBoardController.Current.GameBoard.GridArray[newX, newZ].TilePiece;
             capturedPiece.PieceCaptured();
             Debug.Log(capturedPiece.gameObject.name + ": Captured by : " + gameObject.name);
+            Feedback(null, _captureSound);
         }
+        else
+            Feedback(null, _moveSound);
 
-        //GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileContents = ((int)ChessPieceEnum.EMPTY);
         GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TilePiece = null;
-        SetChessPiecePosition(newX, newZ);
+        SetChessPiecePosition(newX, newZ, false);
 
         return capturedPiece;
     }
 
-    public void SetChessPiecePosition(int newX, int newZ)
+    public void SetChessPiecePosition(int newX, int newZ, bool useSound)
     {
-        //GameBoardController.Current.GameBoard.GridArray[newX, newZ].TileContents = ((int)ChessPieceType);
         GameBoardController.Current.GameBoard.GridArray[newX, newZ].TilePiece = this;
         transform.position = GameBoardController.Current.GetChessWorldSpaceFromTile(newX, newZ);
         xPos = newX;
         zPos = newZ;
+
+        if(useSound)
+            Feedback(null, _moveSound);
     }
 
     public void PieceCaptured()
     {
         //Debug.Log(gameObject.name + ": Captured");
-        //GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileContents = ((int)ChessPieceEnum.EMPTY);
         GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TilePiece = null;
         gameObject.SetActive(false);
         inPlay = false;
@@ -87,5 +92,20 @@ public abstract class ChessPiece : MonoBehaviour
     public virtual void SetTileIndicator(bool status)
     {
         GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileIndicator.SetActive(status);
+    }
+
+    private void Feedback(ParticleSystem particles, AudioClip sound)
+    {
+        // particles
+        if (particles != null)
+        {
+            ParticleSystem _particles = Instantiate(particles, transform.position, Quaternion.identity);
+            _particles.Play();
+        }
+        // audio. TODO - consider Object Pooling for performance
+        if (sound != null)
+        {
+            AudioHelper.PlayClip2D(sound, 1f);
+        }
     }
 }

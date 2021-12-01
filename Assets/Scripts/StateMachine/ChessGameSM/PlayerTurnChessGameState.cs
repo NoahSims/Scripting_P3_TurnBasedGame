@@ -110,7 +110,7 @@ public class PlayerTurnChessGameState : ChessGameState
             {
                 _capturedPiece.gameObject.SetActive(true);
                 _capturedPiece.inPlay = true;
-                _capturedPiece.SetChessPiecePosition(_capturedPiece.xPos, _capturedPiece.zPos);
+                _capturedPiece.SetChessPiecePosition(_capturedPiece.xPos, _capturedPiece.zPos, true);
             }
 
             // set indicators

@@ -39,6 +39,11 @@ public class ChessGameUIController : MonoBehaviour
     [SerializeField] Text _defenderRespawnText = null;
     [SerializeField] Button _defenderRespawnUndoButton = null;
 
+    [Header("General")]
+    [SerializeField] AudioClip _buttonSound = null;
+
+    //---------------------------------------------------------------------------------------------------------------
+    #region Unity Events
     private void OnEnable()
     {
         PlayerTurnChessGameState.PlayerTurnBegan += OnPlayerTurnBegan;
@@ -97,25 +102,31 @@ public class ChessGameUIController : MonoBehaviour
         _playerTurnContinueButton.gameObject.SetActive(false);
         _playerTurnUndoButton.gameObject.SetActive(false);
     }
-
+    #endregion
+    //---------------------------------------------------------------------------------------------------------------
     #region Buttons
     public void ContinueButton()
     {
+        PlayButtonSound();
         ContinueButtonPressed?.Invoke();
     }
 
     public void UndoButton()
     {
+        PlayButtonSound();
         UndoButtonPressed?.Invoke();
     }
 
     public void ReturnToMenuButton()
     {
+        PlayButtonSound();
         ReturnToMenuButtonPressed?.Invoke();
     }
 
     public void DefenderPlacementButton(int pieceNum, GameObject chessPiece, Button button)
     {
+        PlayButtonSound();
+
         chessPiece.SetActive(false);
         button.gameObject.SetActive(false);
 
@@ -135,6 +146,7 @@ public class ChessGameUIController : MonoBehaviour
 
     public void DefenderPlacementKnightButton()
     {
+        PlayButtonSound();
         _defenderPlacementKnightButton.interactable = false;
         _defenderPlacementKnightObject.SetActive(false);
         DefenderPlacementKnightButtonPressed?.Invoke();
@@ -142,6 +154,7 @@ public class ChessGameUIController : MonoBehaviour
 
     public void DefenderPlacementBishopButton()
     {
+        PlayButtonSound();
         _defenderPlacementBishopButton.interactable = false;
         _defenderPlacementBishopObject.SetActive(false);
         DefenderPlacementBishopButtonPressed?.Invoke();
@@ -149,31 +162,21 @@ public class ChessGameUIController : MonoBehaviour
 
     public void DefenderPlacementRookButton()
     {
+        PlayButtonSound();
         _defenderPlacementRookButton.interactable = false;
         _defenderPlacementRookObject.SetActive(false);
         DefenderPlacementRookButtonPressed?.Invoke();
     }
 
-    public void OnDefenderPlacementCancelHolding(int pieceNum)
+    private void PlayButtonSound()
     {
-        switch(pieceNum)
+        if(_buttonSound != null)
         {
-            case (((int)ChessPieceEnum.KNIGHT)):
-                _defenderPlacementKnightButton.interactable = true;
-                _defenderPlacementKnightObject.SetActive(true);
-                break;
-            case (((int)ChessPieceEnum.BISHOP)):
-                _defenderPlacementBishopButton.interactable = true;
-                _defenderPlacementBishopObject.SetActive(true);
-                break;
-            case (((int)ChessPieceEnum.ROOK)):
-                _defenderPlacementRookButton.interactable = true;
-                _defenderPlacementRookObject.SetActive(true);
-                break;
+            AudioHelper.PlayClip2D(_buttonSound, 1f);
         }
     }
     #endregion
-
+    //---------------------------------------------------------------------------------------------------------------
     #region Events
     void OnPlayerTurnBegan(int turnNumber)
     {
@@ -231,6 +234,25 @@ public class ChessGameUIController : MonoBehaviour
         _defenderPlacementText.gameObject.SetActive(true);
     }
 
+    public void OnDefenderPlacementCancelHolding(int pieceNum)
+    {
+        switch (pieceNum)
+        {
+            case (((int)ChessPieceEnum.KNIGHT)):
+                _defenderPlacementKnightButton.interactable = true;
+                _defenderPlacementKnightObject.SetActive(true);
+                break;
+            case (((int)ChessPieceEnum.BISHOP)):
+                _defenderPlacementBishopButton.interactable = true;
+                _defenderPlacementBishopObject.SetActive(true);
+                break;
+            case (((int)ChessPieceEnum.ROOK)):
+                _defenderPlacementRookButton.interactable = true;
+                _defenderPlacementRookObject.SetActive(true);
+                break;
+        }
+    }
+
     void OnDefenderPlacementEnded()
     {
         _defenderPlacementText.gameObject.SetActive(false);
@@ -280,4 +302,5 @@ public class ChessGameUIController : MonoBehaviour
         }
     }
     #endregion
+    //---------------------------------------------------------------------------------------------------------------
 }

@@ -12,6 +12,7 @@ public class GameBoardController : MonoBehaviour
     [SerializeField] private float _tileSize = 1.5f;
     [SerializeField] private GameObject _tileIndicatorHolder;
     [SerializeField] private GameObject _tileIndicatorPrefab;
+    [SerializeField] private GameObject _tileIndicatorRedPrefab;
     private Vector3 _pieceOffset;
 
     [Header("Game Pieces")]
@@ -55,6 +56,10 @@ public class GameBoardController : MonoBehaviour
                 GameBoard.GridArray[col, row].TileIndicator = Instantiate(_tileIndicatorPrefab, _tileIndicatorHolder.transform);
                 GameBoard.GridArray[col, row].TileIndicator.transform.position += (new Vector3(col, 0, row) * GameBoard.CellSize) + (new Vector3(GameBoard.CellSize, 0, GameBoard.CellSize) * 0.5f);
                 GameBoard.GridArray[col, row].TileIndicator.SetActive(false);
+
+                GameBoard.GridArray[col, row].TileIndicatorRed = Instantiate(_tileIndicatorRedPrefab, _tileIndicatorHolder.transform);
+                GameBoard.GridArray[col, row].TileIndicatorRed.transform.position += (new Vector3(col, 0, row) * GameBoard.CellSize) + (new Vector3(GameBoard.CellSize, 0, GameBoard.CellSize) * 0.5f);
+                GameBoard.GridArray[col, row].TileIndicatorRed.SetActive(false);
             }
         }
     }
@@ -92,6 +97,7 @@ public class GameBoardController : MonoBehaviour
             for (int row = 0; row < GameBoard.Height; row++)
             {
                 GameBoard.GridArray[col, row].TileIndicator.SetActive(false);
+                GameBoard.GridArray[col, row].TileIndicatorRed.SetActive(false);
             }
         }
     }

@@ -13,7 +13,7 @@ public class MiniMaxTree
 
     public void DetermineMove()
     {
-        int maxScore = -999;
+        float maxScore = -999f;
         List<PieceMove> bestMoveList = new List<PieceMove>();
 
         // this bool disables the AI's ability to attack for the first turn, but only for the first turn
@@ -35,7 +35,7 @@ public class MiniMaxTree
                 foreach (Vector2 move in moves)
                 {
                     MiniMaxNode child = new MiniMaxNode(true, 1, depthLimit, piece, move);
-                    int childScore = child.CalculateScore();
+                    float childScore = child.CalculateScore();
 
                     //Debug.Log(piece.name + ": " + childScore);
 
@@ -67,9 +67,14 @@ public class MiniMaxTree
         Debug.Log("MiniMax Max Score = " + maxScore);
 
         // select random move from best moves
-        int randNum = Random.Range(0, bestMoveList.Count);
-        Debug.Log("random value = " + randNum + "; count = " + bestMoveList.Count);
-        bestMoveList[randNum].piece.MoveChessPiece(((int)bestMoveList[randNum].move.x), ((int)bestMoveList[randNum].move.y));
+        if (bestMoveList.Count > 0)
+        {
+            int randNum = Random.Range(0, bestMoveList.Count);
+            //Debug.Log("random value = " + randNum + "; count = " + bestMoveList.Count);
+            bestMoveList[randNum].piece.SetTileIndicatorRed(true);
+            bestMoveList[randNum].piece.MoveChessPiece(((int)bestMoveList[randNum].move.x), ((int)bestMoveList[randNum].move.y));
+            bestMoveList[randNum].piece.SetTileIndicatorRed(true);
+        }
     }
 }
 
@@ -90,7 +95,7 @@ public class MiniMaxNode
     bool isMaximizer;
     int depth;
     int depthLimit;
-    int score;
+    float score;
     ChessPiece piece;
     Vector2 pieceOrigPos;
     Vector2 moveTo;
@@ -106,7 +111,7 @@ public class MiniMaxNode
         moveTo = newMove;
     }
 
-    public int CalculateScore()
+    public float CalculateScore()
     {
         //Debug.Log("Depth = " + this.depth);
 
@@ -133,7 +138,7 @@ public class MiniMaxNode
         return this.score;
     }
 
-    private int TestMove()
+    private float TestMove()
     {
         // get captured piece
         attackTarget = GameBoardController.Current.GameBoard.GridArray[((int)moveTo.x), ((int)moveTo.y)].TilePiece;
@@ -154,16 +159,16 @@ public class MiniMaxNode
             if (attackTarget == null)
                 return 0;
             else if (attackTarget.ChessPieceType == ChessPieceEnum.KING)
-                return 10;
+                return 10f * (1f - (0.1f * depth));
             else
-                return 2;
+                return 1f * (1f - (0.1f * depth));
         }
         else     // maximizing player loses score if minimizing player captures a piece
         {
             if (attackTarget == null)
                 return 0;
             else
-                return -1;
+                return -1f * (1f - (0.1f * depth));
         }
     }
 
@@ -180,9 +185,9 @@ public class MiniMaxNode
             attackTarget.inPlay = true;
     }
 
-    private int GetMinScoreFromChildren()
+    private float GetMinScoreFromChildren()
     {
-        int minScore = 999;
+        float minScore = 999f;
 
         foreach (ChessPiece oponent in GameBoardController.Current._defenders)
         {
@@ -213,9 +218,9 @@ public class MiniMaxNode
         return minScore;
     }
 
-    private int GetMaxScoreFromChildren()
+    private float GetMaxScoreFromChildren()
     {
-        int maxScore = -999;
+        float maxScore = -999f;
 
         foreach (ChessPiece oponent in GameBoardController.Current._blackTeam)
         {

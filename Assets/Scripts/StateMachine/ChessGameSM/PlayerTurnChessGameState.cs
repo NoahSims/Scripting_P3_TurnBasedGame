@@ -5,7 +5,7 @@ using System;
 
 public class PlayerTurnChessGameState : ChessGameState
 {
-    public static event Action<int> PlayerTurnBegan;
+    public static event Action PlayerTurnBegan;
     public static event Action<bool> PlayerTurnContinueReady;
     public static event Action PlayerTurnEnded;
 
@@ -18,7 +18,7 @@ public class PlayerTurnChessGameState : ChessGameState
     public override void Enter()
     {
         Debug.Log("Player Turn: ...Entering");
-        PlayerTurnBegan?.Invoke(StateMachine.RoundNumber);
+        PlayerTurnBegan?.Invoke();
 
         // hook into events
         ChessGameUIController.ContinueButtonPressed += OnPressedConfirm;

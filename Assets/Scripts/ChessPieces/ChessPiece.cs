@@ -92,6 +92,13 @@ public abstract class ChessPiece : MonoBehaviour
     public virtual void SetTileIndicator(bool status)
     {
         GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileIndicator.SetActive(status);
+        GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileIndicatorRed.SetActive(false);
+    }
+
+    public virtual void SetTileIndicatorRed(bool status)
+    {
+        GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileIndicator.SetActive(false);
+        GameBoardController.Current.GameBoard.GridArray[xPos, zPos].TileIndicatorRed.SetActive(status);
     }
 
     private void Feedback(ParticleSystem particles, AudioClip sound)

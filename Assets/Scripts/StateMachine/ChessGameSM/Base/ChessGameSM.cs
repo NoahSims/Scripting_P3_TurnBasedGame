@@ -10,6 +10,9 @@ public class ChessGameSM : StateMachine
     private int _roundNumber = 0;
     public int RoundNumber { get => _roundNumber; set => _roundNumber = value; }
 
+    [SerializeField] private int _maxRounds = 15;
+    public int MaxRounds { get => _maxRounds; }
+
     private void Start()
     {
         ChangeState<SetupChessGameState>();

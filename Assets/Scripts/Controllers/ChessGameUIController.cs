@@ -23,6 +23,7 @@ public class ChessGameUIController : MonoBehaviour
     [SerializeField] Text _boardGeneratingText = null;
     [SerializeField] Canvas _winScreen = null;
     [SerializeField] Text _winLoseText = null;
+    [SerializeField] Text _roundCounter = null;
 
     [Header("Defender Placement State")]
     [SerializeField] Canvas _defenderPlacementScreen = null;
@@ -61,6 +62,7 @@ public class ChessGameUIController : MonoBehaviour
         DefenderRespawnChessGameState.DefenderRespawnEnded += OnDefenderRespawnEnded;
         DefenderRespawnChessGameState.DefenderMenuReset += OnDefenderRespawnMenuReset;
         DefenderRespawnChessGameState.DefenderRespawnContinueReady += OnDefenderRespawnContinueReady;
+        EndRoundChessGameState.EndRound += OnEndRound;
 
         WinChessGameState.PlayerWon += OnPlayerWon;
         LoseChessGameState.PlayerLost += OnPlayerLost;
@@ -85,6 +87,7 @@ public class ChessGameUIController : MonoBehaviour
         DefenderRespawnChessGameState.DefenderRespawnContinueReady -= OnDefenderPlacementContinueReady;
         WinChessGameState.PlayerWon -= OnPlayerWon;
         LoseChessGameState.PlayerLost -= OnPlayerLost;
+        EndRoundChessGameState.EndRound -= OnEndRound;
     }
 
     private void Start()
@@ -101,6 +104,7 @@ public class ChessGameUIController : MonoBehaviour
         _winScreen.gameObject.SetActive(false);
         _playerTurnContinueButton.gameObject.SetActive(false);
         _playerTurnUndoButton.gameObject.SetActive(false);
+        _roundCounter.gameObject.SetActive(false);
     }
     #endregion
     //---------------------------------------------------------------------------------------------------------------
@@ -178,10 +182,10 @@ public class ChessGameUIController : MonoBehaviour
     #endregion
     //---------------------------------------------------------------------------------------------------------------
     #region Events
-    void OnPlayerTurnBegan(int turnNumber)
+    void OnPlayerTurnBegan()
     {
         _playerTurnCounter.gameObject.SetActive(true);
-        _playerTurnCounter.text = "Player turn: " + turnNumber.ToString();
+        //_playerTurnCounter.text = "Player turn: " + turnNumber.ToString();
     }
 
     void OnPlayerTurnEnded()
@@ -300,6 +304,12 @@ public class ChessGameUIController : MonoBehaviour
                 _defenderPlacementRookObject.SetActive(!_defenderPlacementRookObject.activeSelf);
                 break;
         }
+    }
+
+    void OnEndRound(int roundsRemaining)
+    {
+        _roundCounter.gameObject.SetActive(true);
+        _roundCounter.text = "Rounds Remaining: " + roundsRemaining;
     }
     #endregion
     //---------------------------------------------------------------------------------------------------------------

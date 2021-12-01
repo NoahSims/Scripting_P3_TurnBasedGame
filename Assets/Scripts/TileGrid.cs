@@ -47,6 +47,7 @@ public class Tile
 {
     //public int TileContents;
     public GameObject TileIndicator;
+    public GameObject TileIndicatorRed;
     public ChessPiece TilePiece;
 
     public Tile()

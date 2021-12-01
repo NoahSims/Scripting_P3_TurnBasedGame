@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EndRoundChessGameState : ChessGameState
 {
-    [SerializeField] private int _finalRoundNumber = 15;
+    public static event Action<int> EndRound;
 
     public override void Enter()
     {
         Debug.Log("End Round: ... Enter");
 
         StateMachine.RoundNumber++;
+
         StartCoroutine(CheckGameState());
     }
 
@@ -24,7 +26,7 @@ public class EndRoundChessGameState : ChessGameState
             StateMachine.ChangeState<LoseChessGameState>();
             yield break;
         }
-        else if(StateMachine.RoundNumber >= _finalRoundNumber)
+        else if(StateMachine.RoundNumber > StateMachine.MaxRounds)
         {
             Debug.Log("Round Max reached, ending game");
             StateMachine.ChangeState<WinChessGameState>();
@@ -32,6 +34,8 @@ public class EndRoundChessGameState : ChessGameState
         }
         else
         {
+            EndRound?.Invoke(StateMachine.MaxRounds - StateMachine.RoundNumber);
+
             foreach (ChessPiece defender in GameBoardController.Current._defenders)
             {
                 if (!defender.inPlay)

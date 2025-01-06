@@ -38,15 +38,29 @@ public class EndRoundChessGameState : ChessGameState
 
             foreach (ChessPiece defender in GameBoardController.Current._defenders)
             {
-                if (!defender.inPlay)
+                // If a defender needs to respawn and there are live pawns available, go to respawn
+                if (!defender.inPlay && checkForLivePieces(GameBoardController.Current._whitePawns))
                 {
                     StateMachine.ChangeState<DefenderRespawnChessGameState>();
                     yield break;
                 }
             }
 
-            StateMachine.ChangeState<PlayerTurnChessGameState>();
+            if (checkForLivePieces(GameBoardController.Current._defenders))
+                StateMachine.ChangeState<PlayerTurnChessGameState>();
+            else
+                StateMachine.ChangeState<EnemyTurnChessGameState>();
         }
+    }
+
+    private bool checkForLivePieces(List<ChessPiece> pieces)
+    {
+        foreach (ChessPiece piece in pieces)
+        {
+            if (piece.inPlay)
+                return true;
+        }
+        return false;
     }
 
     public override void Exit()

@@ -44,7 +44,9 @@ public class EnemyTurnChessGameState : ChessGameState
 
         yield return new WaitForSeconds(2f); // neccesary so that Minimax doesn't freeze everything before ui can update
 
-        MiniMaxTree tree = new MiniMaxTree(5);
+        // max depth drastically effects processing time, so limit it based on number of living pieces.
+        int maxDepth = 8 - getNumLiveEnemies();
+        MiniMaxTree tree = new MiniMaxTree(Mathf.Clamp(maxDepth, 3, 9));
         tree.DetermineMove();
 
         //yield return new WaitUntil(() => hasClicked);
@@ -52,6 +54,17 @@ public class EnemyTurnChessGameState : ChessGameState
 
         // go to spawn enemy
         StartCoroutine(EnemySpawn());
+    }
+
+    private int getNumLiveEnemies()
+    {
+        int enemies = 0;
+        foreach (ChessPiece black in GameBoardController.Current._blackTeam)
+        {
+            if (black.inPlay)
+                enemies++;
+        }
+        return enemies;
     }
 
     IEnumerator EnemySpawn()

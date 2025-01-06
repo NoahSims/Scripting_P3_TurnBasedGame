@@ -121,7 +121,7 @@ public class MiniMaxNode
         // check next nodes based on current move
         if(depth < depthLimit)
         {
-            // this is counter-intuitive, but it's right. I did these in a weird order, just don't worry about it
+            // if this node is the maximizer, its child node will be the minimizer, so get the min score from child
             if (isMaximizer)
             {
                 score += GetMinScoreFromChildren();

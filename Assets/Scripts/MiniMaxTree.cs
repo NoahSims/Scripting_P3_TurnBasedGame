@@ -34,7 +34,7 @@ public class MiniMaxTree
 
                 foreach (Vector2 move in moves)
                 {
-                    MiniMaxNode child = new MiniMaxNode(true, 1, depthLimit, piece, move);
+                    MiniMaxNode child = new MiniMaxNode(true, 1, depthLimit, -999f, 999f, piece, move);
                     float childScore = child.CalculateScore();
 
                     //Debug.Log(piece.name + ": " + childScore);
@@ -96,17 +96,20 @@ public class MiniMaxNode
     int depth;
     int depthLimit;
     float score;
+    float alpha, beta;
     ChessPiece piece;
     Vector2 pieceOrigPos;
     Vector2 moveTo;
     ChessPiece attackTarget;
 
-    public MiniMaxNode(bool newIsMaximizer, int newDepth, int newDepthLimit, ChessPiece newPiece, Vector2 newMove)
+    public MiniMaxNode(bool newIsMaximizer, int newDepth, int newDepthLimit, float newAlpha, float newBeta, ChessPiece newPiece, Vector2 newMove)
     {
         isMaximizer = newIsMaximizer;
         depth = newDepth;
         depthLimit = newDepthLimit;
         score = 0;
+        alpha = newAlpha;
+        beta = newBeta;
         piece = newPiece;
         moveTo = newMove;
     }
@@ -119,16 +122,19 @@ public class MiniMaxNode
         score += TestMove();
 
         // check next nodes based on current move
-        if(depth < depthLimit)
+        // don't check children if reached depth limit or piece has captured the king (ending the game)
+        if(depth < depthLimit && score < 1000f)
         {
             // if this node is the maximizer, its child node will be the minimizer, so get the min score from child
             if (isMaximizer)
             {
                 score += GetMinScoreFromChildren();
+                alpha = score;
             }
             else
             {
                 score += GetMaxScoreFromChildren();
+                beta = score;
             }
         }
 
@@ -159,7 +165,7 @@ public class MiniMaxNode
             if (attackTarget == null)
                 return 0;
             else if (attackTarget.ChessPieceType == ChessPieceEnum.KING)
-                return 10f * (1f - (0.1f * depth));
+                return 1000f;
             else
                 return 1f * (1f - (0.1f * depth));
         }
@@ -197,18 +203,23 @@ public class MiniMaxNode
                 List<Vector2> moves = oponent.GetPossibleMoves();
                 foreach (Vector2 move in moves)
                 {
-                    MiniMaxNode currentChild = new MiniMaxNode(!this.isMaximizer, this.depth + 1, this.depthLimit, oponent, move);
+                    MiniMaxNode currentChild = new MiniMaxNode(!this.isMaximizer, this.depth + 1, this.depthLimit, -999f, 999f, oponent, move);
                     currentChild.CalculateScore();
 
                     //Debug.Log("Child score = " + currentChild.score);
+
+                    if (currentChild.beta < alpha)
+                    {
+                        Debug.Log("AlphaBeta pruned a min value of " + currentChild.beta);
+                        return currentChild.beta;
+                    }
+
 
                     if (currentChild.score < minScore)
                     {
                         //Debug.Log("Replacing minScore " + minScore + " with " + currentChild.score);
                         minScore = currentChild.score;
                     }
-                    else
-                        currentChild = null;
                 }
             }
         }
@@ -230,18 +241,22 @@ public class MiniMaxNode
                 List<Vector2> moves = oponent.GetPossibleMoves();
                 foreach (Vector2 move in moves)
                 {
-                    MiniMaxNode currentChild = new MiniMaxNode(!this.isMaximizer, this.depth + 1, this.depthLimit, oponent, move);
+                    MiniMaxNode currentChild = new MiniMaxNode(!this.isMaximizer, this.depth + 1, this.depthLimit, -999f, 999f, oponent, move);
                     currentChild.CalculateScore();
 
                     //Debug.Log("Child score = " + currentChild.score);
+
+                    if (currentChild.alpha > beta)
+                    {
+                        Debug.Log("AlphaBeta pruned a max value of " + currentChild.alpha);
+                        return currentChild.alpha;
+                    }
 
                     if (currentChild.score > maxScore)
                     {
                         //Debug.Log("Replacing maxScore " + maxScore + " with " + currentChild.score);
                         maxScore = currentChild.score;
                     }
-                    else
-                        currentChild = null;
                 }
             }
         }

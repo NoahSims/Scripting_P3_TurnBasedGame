@@ -30,7 +30,8 @@ public abstract class ChessPiece : MonoBehaviour
             ((tile == ((int)ChessTeamEnum.BLACK) && ChessPieceTeam == ChessTeamEnum.DEFENDER) || 
             ((tile == ((int)ChessTeamEnum.WHITE) || tile == ((int)ChessTeamEnum.DEFENDER)) && ChessPieceTeam == ChessTeamEnum.BLACK)))
         {
-            result.Add(new Vector2(xPos + x, zPos + z));
+            //Insert to the front of the move list so that moves that capture can be evauluated be minimax first; better for alpha-beta pruning
+            result.Insert(0, new Vector2(xPos + x, zPos + z));
             return false;
         }
         else

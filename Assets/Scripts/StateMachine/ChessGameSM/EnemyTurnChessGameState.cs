@@ -45,7 +45,7 @@ public class EnemyTurnChessGameState : ChessGameState
         yield return new WaitForSeconds(2f); // neccesary so that Minimax doesn't freeze everything before ui can update
 
         // max depth drastically effects processing time, so limit it based on number of living pieces.
-        int maxDepth = 8 - getNumLiveEnemies();
+        int maxDepth = 7 - getNumLiveEnemies();
         MiniMaxTree tree = new MiniMaxTree(Mathf.Clamp(maxDepth, 3, 9));
         tree.DetermineMove();
 
